@@ -1,0 +1,78 @@
+.form{
+    margin: 10px;
+    color: white;
+    background-color: rgb(63, 63, 63);
+    border: 2px solid #8e8e8e;
+}
+
+.list-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+    height: 60vh;
+}
+.custom-scrollbar{
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #4d4d4d #686868;
+}
+.list{
+    width: 100%;
+    height: 60vh;
+    background-color: #686868;
+}
+.add-button-container {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+}
+.add-button {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    color: white;
+    background-color: #d6d6d6;
+    border-radius:50%;
+}
+.add-button-2{
+    cursor: pointer;
+    width: 80px;
+    height: 40px;
+    color: white;
+    background-color: #4d4d4d;
+    border-radius:4px;
+    margin: 0 10px 0 10px;
+}
+.task-input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    font-size: 18px;
+}
+.list-gap{
+    margin: 20px;
+}
+.icon-plus{
+    width: 30px;
+    height: 30px;
+    background-size: cover;
+    display: inline-block;
+}
+
+.input-display{
+    display: flex;
+    align-items: center;
+    height: 50px;
+}
+
+.text-list{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px;
+}
