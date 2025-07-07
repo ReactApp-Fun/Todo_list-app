@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/ReactApp-Fun/Todo_list-app.git/static/css/main.ebfbbffa.css",
+    "main.js": "/ReactApp-Fun/Todo_list-app.git/static/js/main.86468210.js",
+    "index.html": "/ReactApp-Fun/Todo_list-app.git/index.html",
+    "static/media/plus-icon.svg": "/ReactApp-Fun/Todo_list-app.git/static/media/plus-icon.9abf1edcb5ddcb3544f992aa8150639a.svg",
+    "main.ebfbbffa.css.map": "/ReactApp-Fun/Todo_list-app.git/static/css/main.ebfbbffa.css.map",
+    "main.86468210.js.map": "/ReactApp-Fun/Todo_list-app.git/static/js/main.86468210.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ebfbbffa.css",
+    "static/js/main.86468210.js"
+  ]
+}
