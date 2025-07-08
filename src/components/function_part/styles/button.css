@@ -47,4 +47,59 @@ form{
     border-radius: 4px 0 0 4px;
     outline: none;
     font-size: 18px;
+    transition: all 0.3 ease;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 0 5px #ff9456c9
+}
+
+.search-container{
+    animation: fadeIn 0.3s ease-out, fadeOut 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.date-picker-button{
+    width: auto;
+    outline: none;
+    background-color: #fb7a2f;
+    border: 1px solid transparent;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.2s;
+    font-size: 20px;
+}
+
+.date-picker-button:hover{
+    background-color: #e16b27;
+    transition: all 0.2s;
+}
+
+.date-picker-button:active{
+    transform: scale(0.97);
+}
+
+.date-table{
+    background-color: #fff;
+    box-shadow: 10px 5px 5px #00000046;
+    color: #000;
+    position: fixed;
+    margin: 60px 0 0 200px;
+}
+
+/*rdp*/
+.rdp-month_caption {
+    margin-left: 5px;
 }

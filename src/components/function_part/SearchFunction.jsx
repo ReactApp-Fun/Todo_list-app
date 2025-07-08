@@ -20,6 +20,13 @@ class SearchFunction extends React.Component{
     handleChange = (e) => {
         this.setState({searchInputValue: e.target.value})
     }
+
+    handlePreventEnterKey = (e) =>{
+        if(e.key === 'Enter'){
+            e.preventDefault();
+            return false;
+        }
+    }
     
     render(){
         return(
@@ -32,10 +39,11 @@ class SearchFunction extends React.Component{
                         Search
                     </button>
                 ) : (
-                    <form>
+                    <form className="search-container">
                         <input  type="text" 
                                 className="search-input"
                                 placeholder="Search..."
+                                onKeyDown={this.handlePreventEnterKey}
                         />
                         <button type="button" 
                                 className="close-search add-button"

@@ -81,8 +81,6 @@ class ListFunction extends React.Component {
                                     onClick={this.showInput}
                                 /> 
                             )}
-
-                            
                             
                             {this.state.showInput &&(
                                 <InputFunction 
