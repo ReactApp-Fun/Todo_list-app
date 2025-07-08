@@ -3,6 +3,8 @@ import './styles/function.css';
 import AddFunction from '../function_part/AddFunction';
 import InputFunction from '../function_part/InputFunction';
 import InteractTask from '../function_part/InteractTask';
+import FilterFunction from './FilterFunction';
+import SearchFunction from './SearchFunction';
 
 class ListFunction extends React.Component {
     constructor(props) {
@@ -71,30 +73,41 @@ class ListFunction extends React.Component {
     render(){
         return(
             <div className='form'>
-                <div style={{height: '50px'}}>
-                    {!this.state.showInput && (
-                        <AddFunction 
-                            onClick={this.showInput}
-                        /> 
-                    )}
+                <div className='form-align'>
+                    <div className='upper-select'>
+                        <div style={{height: '50px'}}>
+                            {!this.state.showInput && (
+                                <AddFunction 
+                                    onClick={this.showInput}
+                                /> 
+                            )}
+
+                            
+                            
+                            {this.state.showInput &&(
+                                <InputFunction 
+                                    hideInput={this.hideInput}
+                                    addList={this.addList}
+                                    updateList = {this.updateList}
+                                    editingList = {this.state.editingList}
+                                />
+                            )}
+                        </div>
+
+                        <div style={{display: "flex", gap: "10px", alignItems: "center"}}>
+                            <FilterFunction />
+                            <SearchFunction />
+                        </div>
+                    </div>
                     
-                    {this.state.showInput &&(
-                        <InputFunction 
-                            hideInput={this.hideInput}
-                            addList={this.addList}
-                            updateList = {this.updateList}
-                            editingList = {this.state.editingList}
-                        />
-                    )}
-                </div>
-                
-                <div className='list-container'>
-                    <div className='list custom-scrollbar'>
-                        <InteractTask 
-                            lists = {this.state.lists}
-                            updatingList = {this.updatingList}
-                            deleteList = {this.deleteList}
-                        />
+                    <div className='list-container'>
+                        <div className='list custom-scrollbar'>
+                            <InteractTask 
+                                lists = {this.state.lists}
+                                updatingList = {this.updatingList}
+                                deleteList = {this.deleteList}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

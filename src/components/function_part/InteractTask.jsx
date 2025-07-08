@@ -10,7 +10,7 @@ class InteractTask extends React.Component{
                             <hr />
                         </div>
                         
-                        <div>
+                        <div style={{display: "flex", gap: "10px"}}>
                             <button 
                                 type="button" 
                                 className="add-button-2" 
