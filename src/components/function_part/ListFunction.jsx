@@ -23,20 +23,21 @@ class ListFunction extends React.Component {
     }
 
     // Hàm để thêm một list mới
-    addList = (text) => {
+    addList = (text, date) => {
         const newList = {
             id: Date.now(),
             text,
             completed: false,
+            date: date || null
         };
         const updatedLists = [...this.state.lists, newList];
         this.saveToLocalStorage(updatedLists);
     }
     
     // Cập nhật input
-    updateList = (id, newText) => {
+    updateList = (id, newText, newDate) => {
         const updatedLists = this.state.lists.map(list =>
-            list.id === id ? {...list, text: newText} : list 
+            list.id === id ? {...list, text: newText, date: newDate} : list 
         )
         this.saveToLocalStorage(updatedLists)
     }

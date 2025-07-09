@@ -73,6 +73,7 @@ form{
 .date-picker-button{
     width: auto;
     outline: none;
+    padding: 9px;
     background-color: #fb7a2f;
     border: 1px solid transparent;
     border-radius: 0 4px 4px 0;
@@ -92,13 +93,27 @@ form{
 }
 
 .date-table{
-    background-color: #fff;
+    background-color: #f3f3f3;
     box-shadow: 10px 5px 5px #00000046;
     color: #000;
-    position: fixed;
-    margin: 60px 0 0 200px;
+    position: fixed !important;
+    left: 20%;
 }
-
+.date-input {
+    width: 200px;
+    padding: 9px;
+    border: 1px solid #fb7a2f;
+    border-radius: 0 4px 4px 0;
+    outline: none;
+    font-size: 20px;
+    cursor: pointer;
+    caret-color: transparent; /* Ẩn con trỏ nhấp nháy */
+    appearance: none;
+}
+.date-input:focus{
+    outline: none;
+    box-shadow: 0 0 5px #ff9456c9
+}
 /*rdp*/
 .rdp-month_caption {
     margin-left: 5px;

@@ -6,7 +6,13 @@ class InteractTask extends React.Component{
             <>
                 {this.props.lists.map(list => (
                     <div className="text-list" key={list.id}>
-                        <div style={{margin: "0", wordWrap: "break-word", width: "70%"}}>{list.text}
+                        <div style={{margin: "0", wordWrap: "break-word", width: "70%"}}>
+                            <div>{list.text}</div>
+                            {list.date && (
+                                <div>
+                                    {new Date(list.date).toLocaleDateString()}
+                                </div>
+                            )}  
                             <hr />
                         </div>
                         

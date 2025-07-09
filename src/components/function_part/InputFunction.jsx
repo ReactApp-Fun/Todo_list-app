@@ -9,19 +9,24 @@ class InputFunction extends React.Component {
         super(props)
         this.state = {
             inputValue: props.editingList ? props.editingList.text : '',
-            selectedDay: undefined
-        }
+            selectedDay: undefined,
+            isOpen: false,
+            selectedDate: props.editingList ? props.editingList.date: ''
+        };
+        this.datePickerRef = React.createRef()
     }
     componentDidUpdate = (prevProps) =>{
         if (this.props.editingList?.text !== prevProps.editingList?.text) {
             this.setState({
-                inputValue: this.props.editingList?.text
+                inputValue: this.props.editingList?.text,
+                selectedDate: this.props.editingList?.date
             })
         }
+        document.addEventListener("mousedown", this.handleClickOutside);
     }
-    handleDaySelect = (day) => {
-        this.setState({ selectedDay: day });
-    };
+    componentWillUnmount() {
+        document.removeEventListener("mousedown", this.handleClickOutside);
+    }
     handleChange = (e) => {
         this.setState({
             inputValue: e.target.value
@@ -37,41 +42,83 @@ class InputFunction extends React.Component {
             this.submitForm();
         }
     }
-    submitForm = () =>{
+    submitForm = () => {
         if (this.state.inputValue.trim()) {
             if (this.props.editingList) {
-                this.props.updateList(this.props.editingList.id, this.state.inputValue);
+                this.props.updateList(
+                    this.props.editingList.id, 
+                    this.state.inputValue,
+                    this.state.selectedDate
+                );
             } else {
-                this.props.addList(this.state.inputValue);
+                this.props.addList(
+                    this.state.inputValue,
+                    this.state.selectedDate
+                );
             }
-            this.setState({ inputValue: '' });
+            this.setState({ inputValue: '',
+                            selectedDate: '' 
+                        });
             this.props.hideInput();
         }
     }
-    handleCancelInput = () => {
+    handleCancelInput = () =>{
         this.props.hideInput()
     }
+
+    handleClickOutside = (event) => {
+        if (this.datePickerRef.current && !this.datePickerRef.current.contains(event.target)) {
+        this.setState({ isOpen: false });
+        }
+    };
+
+    handleDayClick = (day) => {
+        this.setState({
+            selectedDate: day,
+            isOpen: false, // Tự động đóng sau khi chọn ngày
+        });
+    };
+
+    toggleDatePicker = () => {
+        this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
+    };
     render(){
-        const {selectedDay} = this.state
+        const {isOpen, selectedDate} = this.state
+
         return( 
-            <div className="input-display" onSubmit={this.handleSubmit}>
-                <form>
+            <form className="input-display" onSubmit={this.handleSubmit}>
+                <div>
                     <input
-                        onKeyPress={this.handleKeyDown}
+                        required
+                        onKeyDown={this.handleKeyDown}
                         value={this.state.inputValue}
                         onChange={this.handleChange }
                         className="task-input"
                         type="text"
                         placeholder="Type your task here..."
-                        autoFocus
                     />
-                    <button type="button" className="date-picker-button"> Date </button>
-                    <DayPicker className="date-table"
-                        mode="single"
-                        selected={selectedDay}
-                        onSelect={this.handleDaySelect}
+                    <input 
+                        required
+                        type="text"
+                        className="date-input"
+                        value={selectedDate ? new Date(selectedDate).toLocaleDateString() : ''}
+                        onClick={this.toggleDatePicker}
+                        onChange={this.handleChange}
+                        placeholder="Pick date...(mm/dd/yy)"
                     />
-                </form>
+                    {isOpen && (
+                        <div ref={this.datePickerRef}>
+                            <DayPicker 
+                                captionLayout="dropdown"
+                                className="date-table"
+                                disabled={{before: new Date()}}
+                                mode="single"
+                                onDayClick={this.handleDayClick}
+                            />
+                        </div>
+                    )}
+                    
+                </div>
                 
                 <button type="submit" className="add-button-2" >
                     Save
@@ -82,7 +129,7 @@ class InputFunction extends React.Component {
                 >
                     Cancel
                 </button>
-            </div>
+            </form>
         )
     }
 }
