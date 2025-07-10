@@ -2,7 +2,7 @@ import React from 'react';
 import './styles/function.css';
 import AddFunction from '../function_part/AddFunction';
 import InputFunction from '../function_part/InputFunction';
-import InteractTask from '../function_part/InteractTask';
+import InteractTask from '../function_part/InteractTask';   
 import SearchFunction from './SearchFunction';
 
 class ListFunction extends React.Component {
