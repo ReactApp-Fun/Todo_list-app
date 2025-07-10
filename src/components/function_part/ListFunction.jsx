@@ -3,7 +3,6 @@ import './styles/function.css';
 import AddFunction from '../function_part/AddFunction';
 import InputFunction from '../function_part/InputFunction';
 import InteractTask from '../function_part/InteractTask';
-import FilterFunction from './FilterFunction';
 import SearchFunction from './SearchFunction';
 
 class ListFunction extends React.Component {
@@ -105,7 +104,6 @@ class ListFunction extends React.Component {
                         </div>
 
                         <div style={{display: "flex", gap: "10px", alignItems: "center"}}>
-                            <FilterFunction />
                             <SearchFunction onSearch={this.handleSearch} />
                         </div>
                     </div>
