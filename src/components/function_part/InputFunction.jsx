@@ -111,7 +111,6 @@ class InputFunction extends React.Component {
                             <DayPicker 
                                 captionLayout="dropdown"
                                 className="date-table"
-                                disabled={{before: new Date()}}
                                 mode="single"
                                 onDayClick={this.handleDayClick}
                             />
