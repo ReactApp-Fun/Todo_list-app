@@ -13,16 +13,15 @@ class ListFunction extends React.Component {
             lists: JSON.parse(localStorage.getItem('lists')) || [],
             editingList: null,
             showInput: false,
+            searchQuery: '',
         };
     }
     
-    // Lưu lists todo vào localStorage
     saveToLocalStorage = (lists) => {
         localStorage.setItem('lists', JSON.stringify(lists));
         this.setState({ lists });
     }
 
-    // Hàm để thêm một list mới
     addList = (text, date) => {
         const newList = {
             id: Date.now(),
@@ -34,29 +33,25 @@ class ListFunction extends React.Component {
         this.saveToLocalStorage(updatedLists);
     }
     
-    // Cập nhật input
     updateList = (id, newText, newDate) => {
         const updatedLists = this.state.lists.map(list =>
             list.id === id ? {...list, text: newText, date: newDate} : list 
-        )
-        this.saveToLocalStorage(updatedLists)
+        );
+        this.saveToLocalStorage(updatedLists);
     }
 
-    // Xoá input
     deleteList = (id) => {
-        const updatedLists = this.state.lists.filter(list => list.id !== id)
-        this.saveToLocalStorage(updatedLists)
+        const updatedLists = this.state.lists.filter(list => list.id !== id);
+        this.saveToLocalStorage(updatedLists);
     }
 
-    // Hàm để tiến hành update
     updatingList = (list) => {
         this.setState({
             editingList: list,
             showInput: true 
-        })
+        });
     }
 
-    // Hiển thị input để thêm list mới
     showInput = () => {
         this.setState({
             showInput: true,
@@ -64,15 +59,31 @@ class ListFunction extends React.Component {
         });
     }
 
-    // Ẩn input khi ấn cancel
     hideInput = () => {
         this.setState({
             showInput: false,
             editingList: null,
         });
     }
-    render(){
-        return(
+
+    handleSearch = (query) => {
+        this.setState({ searchQuery: query });
+    }
+
+    getFilteredLists = () => {
+        const { lists, searchQuery } = this.state;
+        if (!searchQuery.trim()) {
+            return lists;
+        }
+        return lists.filter(list =>
+            list.text.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }
+
+    render() {
+        const filteredLists = this.getFilteredLists();
+
+        return (
             <div className='form'>
                 <div className='form-align'>
                     <div className='upper-select'>
@@ -83,34 +94,34 @@ class ListFunction extends React.Component {
                                 /> 
                             )}
                             
-                            {this.state.showInput &&(
+                            {this.state.showInput && (
                                 <InputFunction 
                                     hideInput={this.hideInput}
                                     addList={this.addList}
-                                    updateList = {this.updateList}
-                                    editingList = {this.state.editingList}
+                                    updateList={this.updateList}
+                                    editingList={this.state.editingList}
                                 />
                             )}
                         </div>
 
                         <div style={{display: "flex", gap: "10px", alignItems: "center"}}>
                             <FilterFunction />
-                            <SearchFunction />
+                            <SearchFunction onSearch={this.handleSearch} />
                         </div>
                     </div>
                     
                     <div className='list-container'>
                         <div className='list custom-scrollbar'>
                             <InteractTask 
-                                lists = {this.state.lists}
-                                updatingList = {this.updatingList}
-                                deleteList = {this.deleteList}
+                                lists={filteredLists}
+                                updatingList={this.updatingList}
+                                deleteList={this.deleteList}
                             />
                         </div>
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 

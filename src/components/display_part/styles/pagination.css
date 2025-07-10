@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   gap: 10px;
-  padding: 10px;
 }
 
 .pagination button {
