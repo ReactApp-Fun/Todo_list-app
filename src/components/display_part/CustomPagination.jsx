@@ -1,48 +1,41 @@
 import React from "react";
-import "./styles/pagination.css"; // Create this CSS file for styling
+import "./styles/pagination.css";
 
 class CustomPagination extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentPage: 1, // Start at page 1
-    };
-  }
-
-  // Calculate total pages based on items per page (5)
+  // Tính toán tổng trang dựa trên itemPerPage (5 item mỗi trang)
   getTotalPages = () => {
     return Math.ceil(this.props.totalItems / this.props.itemsPerPage);
   };
 
-  // Handle page change
+  // hàm xử lý thay đổi trang
   handlePageChange = (page) => {
     if (page >= 1 && page <= this.getTotalPages()) {
-      this.setState({ currentPage: page }, () => {
-        this.props.onPageChange(page); // Notify parent component of page change
-      });
+      this.props.onPageChange(page); // Thông báo cho InteractTask component về sự thay đổi
     }
   };
 
-  // Render page numbers with ellipsis for large lists
+  // Render số trang dựa trên dấu 3 chấm nếu có quá nhiều trang
   renderPageNumbers = () => {
     const totalPages = this.getTotalPages();
-    const { currentPage } = this.state;
+    const { currentPage } = this.props;
     const pageNumbers = [];
-    const maxPagesToShow = 5; // Show up to 5 page numbers at a time
+    const maxPagesToShow = 5; // Hiển thị tối đa 5 trang 
+    // (vd nếu có 10 trang thì sẽ chỉ hiển thị 5 trang và sau đó bấm next/prev để chuyển sang trang cao/thấp)
 
-    let startPage = Math.max(1, currentPage - 2);
-    let endPage = Math.min(totalPages, currentPage + 2);
+    let startPage = Math.max(1, currentPage - 2); // tính toán biến bắt đầu trang với số trang không được nhỏ hơn 1, lấy trang hiện tại trừ 2
+    let endPage = Math.min(totalPages, currentPage + 2); // tính toán biến kết thúc trang với tổng số trang, lấy trang hiện tại cộng 2
 
-    // Adjust start and end to always show 5 pages if possible
+    // Điều chỉnh việc chiếu 5 trang tuỳ vào số trang hiện có
     if (endPage - startPage < maxPagesToShow - 1) {
       if (startPage === 1) {
         endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-      } else if (endPage === totalPages) {
+      } 
+      else if (endPage === totalPages) {
         startPage = Math.max(1, endPage - maxPagesToShow + 1);
       }
     }
 
-    // Add "First" button
+    // Thêm nút First để khi trang được kéo lớn hơn trang thứ 3 thì nút này sẽ xuất hiện với chức năng kéo về trang đầu tiên
     if (totalPages > maxPagesToShow && currentPage > 3) {
       pageNumbers.push(
         <button
@@ -55,7 +48,7 @@ class CustomPagination extends React.Component {
       );
     }
 
-    // Add "Previous" button
+    // Thêm nút prev để quay về trang đầu sau mỗi lần nhấn
     pageNumbers.push(
       <button
         key="prev"
@@ -66,7 +59,7 @@ class CustomPagination extends React.Component {
       </button>
     );
 
-    // Add page numbers
+    // Thêm số trang đại diện cho mỗi trang chứa 5 items
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(
         <button
@@ -79,7 +72,7 @@ class CustomPagination extends React.Component {
       );
     }
 
-    // Add "Next" button
+    // Thêm nút next để đi sang cuối trang sau mỗi lần nhấn
     pageNumbers.push(
       <button
         key="next"
@@ -90,7 +83,7 @@ class CustomPagination extends React.Component {
       </button>
     );
 
-    // Add "Last" button
+    // Thêm nút last để đi về trang cuối cùng
     if (totalPages > maxPagesToShow && currentPage < totalPages - 2) {
       pageNumbers.push(
         <button
@@ -108,7 +101,7 @@ class CustomPagination extends React.Component {
 
   render() {
     const totalPages = this.getTotalPages();
-    if (totalPages <= 1) return null; // Don't show pagination for 1 or fewer pages
+    if (totalPages <= 1) return null; // Không hiển thị pagination nếu không có trang nào hoặc item nào hoặc ít trang
 
     return (
       <div className="pagination">

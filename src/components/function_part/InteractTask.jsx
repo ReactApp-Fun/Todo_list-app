@@ -5,21 +5,22 @@ class InteractTask extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPage: 1, // Track current page in InteractTask
+      currentPage: 1, // Trang hiện tại bắt đầu từ 1
     };
   }
 
-  // Handle page change
+  // Xử lý thay đổi trang
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
 
   render() {
-    const itemsPerPage = 5;
-    const { lists } = this.props;
+
+    // truyền lists và itemsPerPage qua props
+    const { lists, itemsPerPage = 5 } = this.props;
     const { currentPage } = this.state;
 
-    // Calculate start and end indices for slicing the list
+    // Tính toán bắt đầu và kết thúc để cắt danh sách
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const paginatedLists = lists.slice(startIndex, endIndex);
@@ -54,8 +55,9 @@ class InteractTask extends React.Component {
           </div>
         ))}
         <CustomPagination
-          totalItems={lists.length}
+          totalItems={lists.length} 
           itemsPerPage={itemsPerPage}
+          currentPage={this.state.currentPage}
           onPageChange={this.handlePageChange}
         />
       </>

@@ -9,29 +9,32 @@ class ListFunction extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            lists: JSON.parse(localStorage.getItem('lists')) || [],
-            editingList: null,
-            showInput: false,
-            searchQuery: '',
+            lists: JSON.parse(localStorage.getItem('lists')) || [], // lưu danh sách đã nhập vào local storage
+            editingList: null, // state xử lý trạng thái đang cập nhật với trạng thái null
+            showInput: false, // đặt trạng thái hiện thị input là sai tránh hiển thị khi mới load web
+            searchQuery: '', // đặt search là chuỗi rỗng nhằm lưu giá trị khi nhập
         };
     }
     
+    // hàm xử lý lưu danh sách vào local
     saveToLocalStorage = (lists) => {
         localStorage.setItem('lists', JSON.stringify(lists));
         this.setState({ lists });
     }
 
+    // hàm thêm danh sách (text và date đều được thêm)
     addList = (text, date) => {
         const newList = {
             id: Date.now(),
             text,
-            completed: false,
-            date: date || null
+            completed: false, // trạng thái hoàn thành task với mặc định ban đầu là false (-chưa hoàn thiện chức năng này-)
+            date: date || null // đặt giá trị mặc định của date là null tránh bị falsy hoặc undefined
         };
         const updatedLists = [...this.state.lists, newList];
         this.saveToLocalStorage(updatedLists);
     }
     
+    // cập nhật một task 
     updateList = (id, newText, newDate) => {
         const updatedLists = this.state.lists.map(list =>
             list.id === id ? {...list, text: newText, date: newDate} : list 
@@ -39,11 +42,13 @@ class ListFunction extends React.Component {
         this.saveToLocalStorage(updatedLists);
     }
 
+    // xoá một task 
     deleteList = (id) => {
         const updatedLists = this.state.lists.filter(list => list.id !== id);
         this.saveToLocalStorage(updatedLists);
     }
 
+    // trạng thái tiến hành đang cập nhật
     updatingList = (list) => {
         this.setState({
             editingList: list,
@@ -51,6 +56,7 @@ class ListFunction extends React.Component {
         });
     }
 
+    // xử lý mở input
     showInput = () => {
         this.setState({
             showInput: true,
@@ -58,6 +64,7 @@ class ListFunction extends React.Component {
         });
     }
 
+    // xử lý đóng input
     hideInput = () => {
         this.setState({
             showInput: false,
@@ -65,10 +72,13 @@ class ListFunction extends React.Component {
         });
     }
 
+    // xử lý tìm kiếm với tham số query 
     handleSearch = (query) => {
+        // đặt state searchQuery là tham số query
         this.setState({ searchQuery: query });
     }
 
+    // hàm xử lý chức năng tìm kiếm 
     getFilteredLists = () => {
         const { lists, searchQuery } = this.state;
         if (!searchQuery.trim()) {
