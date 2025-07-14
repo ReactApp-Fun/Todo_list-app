@@ -14,6 +14,7 @@ class ListFunction extends React.Component {
             showInput: false, // đặt trạng thái hiện thị input là sai tránh hiển thị khi mới load web
             searchQuery: '', // đặt search là chuỗi rỗng nhằm lưu giá trị khi nhập
         };
+        // đặt giá trị hiện tại của timeout là null
         this.searchTimeout = null;
     }
     
@@ -28,10 +29,9 @@ class ListFunction extends React.Component {
         const newList = {
             id: Date.now(),
             text,
-            completed: false, // trạng thái hoàn thành task với mặc định ban đầu là false (-chưa hoàn thiện chức năng này-)
             date: date || null // đặt giá trị mặc định của date là null tránh bị falsy hoặc undefined
         };
-        const updatedLists = [...this.state.lists, newList];
+        const updatedLists = [newList, ...this.state.lists];
         this.saveToLocalStorage(updatedLists);
     }
     

@@ -8,10 +8,9 @@ class SearchFunction extends React.Component {
             showSearchInput: false, // đặt trạng thái ban đầu của thanh search là false tránh hiển thị khi vừa load trang
             searchInputValue: '', // Giá trị ban đầu rỗng để lưu giá trị
         };
-        this.searchTimeout = null
     }
 
-    // xử lý nhập cho thanh search
+    // xử lý mở thanh search
     toggleInput = () => {
         this.setState(prevState => ({
             showSearchInput: !prevState.showSearchInput,
@@ -23,8 +22,8 @@ class SearchFunction extends React.Component {
         });
     }
 
-     // xử lý thay đổi 
-    handleChange = (e) => { 
+     // xử lý nhập vào search input
+    handleChange = (e) => {
         const value = e.target.value;
         this.setState({ searchInputValue: value }, () => {
             this.props.onSearch(value);
