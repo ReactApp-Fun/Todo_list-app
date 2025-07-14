@@ -22,7 +22,7 @@ class SearchFunction extends React.Component {
         });
     }
 
-     // xử lý nhập vào search input
+    // xử lý nhập vào search input
     handleChange = (e) => {
         const value = e.target.value;
         this.setState({ searchInputValue: value }, () => {

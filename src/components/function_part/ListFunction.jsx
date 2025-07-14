@@ -148,6 +148,7 @@ class ListFunction extends React.Component {
                                 updatingList={this.updatingList}
                                 deleteList={this.deleteList}
                                 ref={this.setInteractTaskRef}
+                                searchQuery={this.state.searchQuery}
                             />
                         </div>
                     </div>

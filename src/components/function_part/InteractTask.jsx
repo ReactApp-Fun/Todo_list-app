@@ -1,5 +1,6 @@
 import React from "react";
 import CustomPagination from "../display_part/CustomPagination";
+import './styles/function.css'
 
 class InteractTask extends React.Component {
   constructor(props) {
@@ -28,9 +29,24 @@ class InteractTask extends React.Component {
     })
   }
 
+  // hàm xử lý highlight một kí tự khi được tìm kiếm
+  highlightText = (text, query) => {
+    if(!query.trim()){
+      return text
+    }
+    const regex = new RegExp(`(${query})`, 'gi'); // Biểu thức chính quy để không phân biệt chữ hoa/thường
+    const parts = text.split(regex);
+    return parts.map((part, index) =>
+      regex.test(part) ? (
+        <span key={index} className="highlight">{part}</span>
+      ) : (
+        part
+      )
+    );
+  }
   render() {
     // truyền lists và itemsPerPage qua props
-    const { lists, itemsPerPage = 5 } = this.props;
+    const { lists, itemsPerPage = 5, searchQuery } = this.props;
     const { currentPage } = this.state;
 
     // Tính toán bắt đầu và kết thúc để cắt danh sách
@@ -43,7 +59,7 @@ class InteractTask extends React.Component {
         {paginatedLists.map((list) => (
           <div className="text-list" key={list.id}>
             <div style={{ margin: "0", wordWrap: "break-word", width: "70%" }}>
-              <div>{list.text}</div>
+              <div>{this.highlightText(list.text, searchQuery)}</div>
               {list.date && (
                 <div>{new Date(list.date).toLocaleDateString()}</div>
               )}
