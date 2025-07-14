@@ -14,8 +14,21 @@ class InteractTask extends React.Component {
     this.setState({ currentPage: page });
   };
 
-  render() {
+  // Tạo lifecycle did update để xét nếu chữ được ghi trên thanh tìm kiếm thì sẽ tiến hành nhảy vào hàm reset
+  componentDidUpdate(prevProps){
+    if (prevProps.lists !== this.props.lists){
+      this.handleResetPage();
+    }
+  }
 
+  // hàm thực hiện reset về trang đầu khi bắt đầu tìm kiếm
+  handleResetPage = () => {
+    this.setState({
+      currentPage: 1
+    })
+  }
+
+  render() {
     // truyền lists và itemsPerPage qua props
     const { lists, itemsPerPage = 5 } = this.props;
     const { currentPage } = this.state;

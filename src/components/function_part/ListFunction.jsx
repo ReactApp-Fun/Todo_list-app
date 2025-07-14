@@ -16,15 +16,6 @@ class ListFunction extends React.Component {
         };
         this.searchTimeout = null;
     }
-
-    debounce = (funct, delay) => {
-        return(...args) => {
-            clearTimeout(this.searchTimeout)
-            this.searchTimeout = setTimeout(() => {
-                funct.apply(this, args)
-            }, delay)
-        }
-    }
     
     // hàm xử lý lưu danh sách vào local
     saveToLocalStorage = (lists) => {
@@ -82,10 +73,31 @@ class ListFunction extends React.Component {
         });
     }
 
-    // xử lý tìm kiếm 
+    // Tạo hàm xử lý debounce để nhằm tạo độ trễ trong tìm kiếm nhằm giảm số lượng yêu cầu không cần thiết
+    debounce = (funct, delay) => {
+        return(...args) => {
+            clearTimeout(this.searchTimeout)
+            this.searchTimeout = setTimeout(() => {
+                funct.apply(this, args)
+            }, delay)
+        }
+    }
+
+    // xử lý tìm kiếm khi sử dụng debounce
     handleSearch = this.debounce((query) => {
-        this.setState({searchQuery: query})
-    }, 700)
+        this.setState({
+            searchQuery: query,
+    }, () => {
+        if(this.interactTaskRef){
+                this.interactTaskRef.handleResetPage();
+            }
+        })
+    }, 700);
+
+    // tham chiếu đến InteractTask thông qua ref
+    setInteractTaskRef = (ref) => {
+        this.interactTaskRef = ref
+    }
 
     // hàm xử lý chức năng tìm kiếm 
     getFilteredLists = () => {
@@ -123,7 +135,9 @@ class ListFunction extends React.Component {
                         </div>
 
                         <div style={{display: "flex", gap: "10px", alignItems: "center"}}>
-                            <SearchFunction onSearch={this.handleSearch} />
+                            <SearchFunction 
+                                onSearch={this.handleSearch}
+                            />
                         </div>
                     </div>
                     
@@ -133,6 +147,7 @@ class ListFunction extends React.Component {
                                 lists={filteredLists}
                                 updatingList={this.updatingList}
                                 deleteList={this.deleteList}
+                                ref={this.setInteractTaskRef}
                             />
                         </div>
                     </div>
