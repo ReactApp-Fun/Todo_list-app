@@ -1,17 +1,15 @@
 import React from "react";
 import './styles/button.css'
 
-//Note: chức năng search hoạt động bằng cách gõ bất cữ chữ cái nào:
-// - nếu có chữ cái liên quan thì sẽ hiển thị ra task liên quan
-// - nếu không sẽ trả về chuỗi rỗng 
 class SearchFunction extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             showSearchInput: false, // đặt trạng thái ban đầu của thanh search là false tránh hiển thị khi vừa load trang
-            searchInputValue: '' // Giá trị ban đầu rỗng để lưu giá trị
+            searchInputValue: '', // Giá trị ban đầu rỗng để lưu giá trị
         };
-    }   
+        this.searchTimeout = null
+    }
 
     // xử lý nhập cho thanh search
     toggleInput = () => {

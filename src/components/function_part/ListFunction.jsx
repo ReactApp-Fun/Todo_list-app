@@ -3,7 +3,7 @@ import './styles/function.css';
 import AddFunction from '../function_part/AddFunction';
 import InputFunction from '../function_part/InputFunction';
 import InteractTask from '../function_part/InteractTask';   
-import SearchFunction from './SearchFunction';
+import SearchFunction from '../function_part/SearchFunction';
 
 class ListFunction extends React.Component {
     constructor(props) {
@@ -14,6 +14,16 @@ class ListFunction extends React.Component {
             showInput: false, // đặt trạng thái hiện thị input là sai tránh hiển thị khi mới load web
             searchQuery: '', // đặt search là chuỗi rỗng nhằm lưu giá trị khi nhập
         };
+        this.searchTimeout = null;
+    }
+
+    debounce = (funct, delay) => {
+        return(...args) => {
+            clearTimeout(this.searchTimeout)
+            this.searchTimeout = setTimeout(() => {
+                funct.apply(this, args)
+            }, delay)
+        }
     }
     
     // hàm xử lý lưu danh sách vào local
@@ -72,11 +82,10 @@ class ListFunction extends React.Component {
         });
     }
 
-    // xử lý tìm kiếm với tham số query 
-    handleSearch = (query) => {
-        // đặt state searchQuery là tham số query
-        this.setState({ searchQuery: query });
-    }
+    // xử lý tìm kiếm 
+    handleSearch = this.debounce((query) => {
+        this.setState({searchQuery: query})
+    }, 700)
 
     // hàm xử lý chức năng tìm kiếm 
     getFilteredLists = () => {
