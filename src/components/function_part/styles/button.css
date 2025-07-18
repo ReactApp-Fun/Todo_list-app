@@ -91,14 +91,6 @@ form{
 .date-picker-button:active{
     transform: scale(0.97);
 }
-
-.date-table{
-    background-color: #f3f3f3;
-    box-shadow: 10px 5px 5px #00000046;
-    color: #000;
-    position: fixed !important;
-    left: 20%;
-}
 .date-input {
     width: 200px;
     padding: 9px;

@@ -1,6 +1,6 @@
+import React from 'react';
 import TodoTable from './components/display_part/TodoTable';
 import ListFunction from './components/function_part/ListFunction';
-
 
 const App = () => {
   return (
@@ -13,3 +13,4 @@ const App = () => {
 }
 
 export default App;
+

@@ -4,6 +4,7 @@ import AddFunction from '../function_part/AddFunction';
 import InputFunction from '../function_part/InputFunction';
 import InteractTask from '../function_part/InteractTask';   
 import SearchFunction from '../function_part/SearchFunction';
+import ThemeContext from '../context/ThemeContext';
 
 class ListFunction extends React.Component {
     constructor(props) {
@@ -17,6 +18,7 @@ class ListFunction extends React.Component {
         // đặt giá trị hiện tại của timeout là null
         this.searchTimeout = null;
     }
+    static contextType = ThemeContext;
     
     // hàm xử lý lưu danh sách vào local
     saveToLocalStorage = (lists) => {
@@ -112,12 +114,15 @@ class ListFunction extends React.Component {
 
     render() {
         const filteredLists = this.getFilteredLists();
+        const { theme } = this.context;
 
         return (
-            <div className='form'>
+            <div className='form' style={{ backgroundColor: theme === 'light' ? '#fff' : '#424242ff', 
+                                           color: theme === 'light' ? '#000' : '#fff',
+                                           transition: 'background-color 0.3s ease, color 0.3s ease' }}>
                 <div className='form-align'>
                     <div className='upper-select'>
-                        <div style={{height: '50px'}}>
+                        <div className='task-group'>
                             {!this.state.showInput && (
                                 <AddFunction 
                                     onClick={this.showInput}
@@ -133,7 +138,7 @@ class ListFunction extends React.Component {
                                 />
                             )}
                         </div>
-
+                        <div className="vertical-line"></div>
                         <div style={{display: "flex", gap: "10px", alignItems: "center"}}>
                             <SearchFunction 
                                 onSearch={this.handleSearch}

@@ -1,5 +1,4 @@
 import React from "react";
-import "./styles/pagination.css";
 
 class CustomPagination extends React.Component {
   // Tính toán tổng trang dựa trên itemPerPage (5 item mỗi trang)

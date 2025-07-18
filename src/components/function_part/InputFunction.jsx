@@ -1,8 +1,7 @@
 import React from "react";
 import "./styles/button.css"
-import { DayPicker } from "react-day-picker";
-import 'react-day-picker/dist/style.css'; // import default style của thư viện rdp
-
+import { CoolButton } from "../context/ButtonStyle";
+// import DayPicker from "../display_part/DayPicker";
 
 class InputFunction extends React.Component {
     constructor(props){
@@ -106,7 +105,7 @@ class InputFunction extends React.Component {
     };
 
     render(){
-        const {isOpen, selectedDate} = this.state
+        //const {isOpen, selectedDate} = this.state
 
         return( 
             <form className="input-display" onSubmit={this.handleSubmit}>
@@ -120,37 +119,39 @@ class InputFunction extends React.Component {
                         type="text"
                         placeholder="Type your task here..."
                     />
-                    <input 
+                    {/* <input 
                         required
-                        type="text"
+                        type="date"
                         className="date-input"
-                        value={selectedDate ? new Date(selectedDate).toLocaleDateString() : ''}
+                        value={selectedDate}
                         onClick={this.toggleDayPicker}
                         onChange={this.handleChange}
                         placeholder="Pick date...(mm/dd/yy)"
-                    />
-                    {isOpen && (
+                    /> */}
+                    {/* {isOpen && (
                         <div ref={this.datePickerRef}>
                             <DayPicker 
-                                captionLayout="dropdown"
-                                className="date-table"
-                                mode="single"
+                                // captionLayout="dropdown"
+                                // className="date-table"
+                                // mode="single"
                                 onDayClick={this.handleDayClick}
                             />
                         </div>
-                    )}
+                    )} */}
                     
                 </div>
                 
-                <button type="submit" className="add-button-2" >
-                    Save
-                </button>
-                <button type="button" 
-                        className="add-button-2"    
-                        onClick={this.handleCancelInput}
-                >
-                    Cancel
-                </button>
+                <div className="add-button-2-group">
+                    <CoolButton type="submit" className="add-button-2" >
+                        Save
+                    </CoolButton>
+                    <CoolButton type="button" 
+                            className="add-button-2"    
+                            onClick={this.handleCancelInput}
+                    >
+                        Cancel
+                    </CoolButton>
+                </div>
             </form>
         )
     }

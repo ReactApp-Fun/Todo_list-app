@@ -1,5 +1,4 @@
 .form{
-    color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,7 +26,6 @@
 .list{
     width: 100%;
     height: 60vh;
-    background-color: #676767;
     border-radius: 5px;
     margin-top: 10px;
 }
@@ -97,6 +95,7 @@
 
 .input-display{
     display: flex;
+    flex-direction: row-reverse;
     align-items: center;
     height: 50px;
     gap: 10px;
@@ -105,18 +104,49 @@
 .text-list{
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     margin: 10px;
+    padding: 5px;
+    border: 1px solid #fb7a2f;
+    
 }
 
 .upper-select{
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
     gap: 10px;
 }
 
 .highlight {
   background-color: #abab1b;
+}
+
+.popup{
+  position: fixed;
+  top: 50px;
+  left: 50px;
+  background: #333;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  z-index: 1000;
+}
+.task-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.add-button-2-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.vertical-line {
+    width: 1px;
+    height: 30px;
+    background-color: #fb7a2f;
+    margin: 0 10px;
 }

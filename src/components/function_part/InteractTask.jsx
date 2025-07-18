@@ -1,6 +1,7 @@
 import React from "react";
 import CustomPagination from "../display_part/CustomPagination";
 import './styles/function.css'
+import { CoolButton } from "../context/ButtonStyle";
 
 class InteractTask extends React.Component {
   constructor(props) {
@@ -63,23 +64,22 @@ class InteractTask extends React.Component {
               {list.date && (
                 <div>{new Date(list.date).toLocaleDateString()}</div>
               )}
-              <hr />
             </div>
             <div style={{ display: "flex", gap: "10px" }}>
-              <button
+              <CoolButton
                 type="button"
                 className="add-button-2"
                 onClick={() => this.props.updatingList(list)}
               >
                 Update
-              </button>
-              <button
+              </CoolButton>
+              <CoolButton
                 type="button"
                 className="add-button-2"
                 onClick={() => this.props.deleteList(list.id)}
               >
                 Delete
-              </button>
+              </CoolButton>
             </div>
           </div>
         ))}
