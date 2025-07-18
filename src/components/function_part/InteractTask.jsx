@@ -1,5 +1,5 @@
 import React from "react";
-import CustomPagination from "../display_part/CustomPagination";
+// import CustomPagination from "../display_part/CustomPagination";
 import './styles/function.css'
 import { CoolButton } from "../context/ButtonStyle";
 
@@ -47,17 +47,17 @@ class InteractTask extends React.Component {
   }
   render() {
     // truyền lists và itemsPerPage qua props
-    const { lists, itemsPerPage = 5, searchQuery } = this.props;
-    const { currentPage } = this.state;
+    // const { lists, itemsPerPage = 5, searchQuery } = this.props;
+    // const { currentPage } = this.state;
 
     // Tính toán bắt đầu và kết thúc để cắt danh sách
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const paginatedLists = lists.slice(startIndex, endIndex);
+    // const startIndex = (currentPage - 1) * itemsPerPage;
+    // const endIndex = startIndex + itemsPerPage;
+    // const paginatedLists = lists.slice(startIndex, endIndex);
 
     return (
       <>
-        {paginatedLists.map((list) => (
+        {/* {paginatedLists.map((list) => (
           <div className="text-list" key={list.id}>
             <div style={{ margin: "0", wordWrap: "break-word", width: "70%" }}>
               <div>{this.highlightText(list.text, searchQuery)}</div>
@@ -88,7 +88,7 @@ class InteractTask extends React.Component {
           itemsPerPage={itemsPerPage}
           currentPage={this.state.currentPage}
           onPageChange={this.handlePageChange}
-        />
+        /> */}
       </>
     );
   }
