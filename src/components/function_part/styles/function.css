@@ -150,3 +150,12 @@
     background-color: #fb7a2f;
     margin: 0 10px;
 }
+
+.theme-button{
+    background-color: #fb7a2f;
+    color: unset;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}

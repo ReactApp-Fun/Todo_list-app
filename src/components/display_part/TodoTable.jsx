@@ -1,8 +1,7 @@
 import React from 'react';
 import './styles/accessory.css'
-import CustomPopup from './CustomPopup';
 import ThemeContext from '../context/ThemeContext';
-import SwitchThemeFunction from '../function_part/SwitchThemeFunction';
+import ThemeSwitcherFunction from '../function_part/SwitchThemeFunction';
 
 class TodoTable extends React.Component {
     constructor(props){
@@ -12,12 +11,6 @@ class TodoTable extends React.Component {
         }
     }
     static contextType = ThemeContext;
-    handlePopup = () =>{ 
-        this.setState(prev => ({popupOpen: !prev.popupOpen}))
-    }
-    handlePopupClick = () => {
-        this.setState({popupOpen: false})
-    }
     render(){
         const { theme } = this.context;
         return(
@@ -28,14 +21,7 @@ class TodoTable extends React.Component {
                     <h1 className="title">Todo Website</h1>
                 </div>
                 {this.props.children}
-                <button onClick={this.handlePopup}>
-                    {this.popupOpen ? 'Hide' : 'Open'}
-                </button>
-                <CustomPopup 
-                    onClick = {this.handlePopupClick}
-                    isOpen = {this.state.popupOpen}
-                />
-                <SwitchThemeFunction />
+                <ThemeSwitcherFunction />   
             </div>
         )
     }
