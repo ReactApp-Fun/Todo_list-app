@@ -17,9 +17,7 @@ const withPagination = (WrappedComponent) => {
     
     getTotalPages = () => {
       const { lists, itemsPerPage } = this.props;
-       if (!lists || !Array.isArray(lists)) {
-        return 0;
-      }
+      if (!Array.isArray(lists)) return 0;
       return Math.ceil(lists.length / itemsPerPage);
     }
 
@@ -122,7 +120,7 @@ const withPagination = (WrappedComponent) => {
       
       const startIndex = (this.state.currentPage - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
-      const paginatedLists = lists.slice(startIndex, endIndex);
+      const paginatedLists = Array.isArray(lists) ? lists.slice(startIndex, endIndex) : [];
       return (
         <div>
           <WrappedComponent

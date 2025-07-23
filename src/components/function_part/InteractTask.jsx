@@ -1,7 +1,6 @@
 import React from "react";
 import './styles/function.css'
 import { CoolButton } from "../context/ButtonStyle";
-import withPagination from "../display_part/WithPagination";
 
 class InteractTask extends React.Component {
   handleResetPage = () => {
@@ -61,4 +60,4 @@ class InteractTask extends React.Component {
   }
 }
 
-export default withPagination(InteractTask)
+export default InteractTask
