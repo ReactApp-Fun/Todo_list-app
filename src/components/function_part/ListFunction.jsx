@@ -98,17 +98,23 @@ class ListFunction extends React.Component {
         this.setState({
             searchQuery: query,
     }, () => {
-        if(this.interactTaskRef){
-                this.interactTaskRef.handleResetPage();
+            if(this.interactTaskRefForPagination){
+                this.interactTaskRefForPagination.resetPagination();
+            }
+            else if(this.interactTaskRefForInfiniteScroll){
+                this.interactTaskRefForInfiniteScroll.resetInfiniteScroll();
             }
         })
     }, 700);
 
     // tham chiếu đến InteractTask thông qua ref
-    setInteractTaskRef = (ref) => {
-        this.interactTaskRef = ref
+    setInteractTaskRefForPagination = (ref) => {
+        this.interactTaskRefForPagination = ref
     }
 
+    setInteractTaskRefForInfiniteScroll = (ref) => {
+        this.interactTaskRefForInfiniteScroll = ref;
+    }
     // hàm xử lý chức năng tìm kiếm 
     getFilteredLists = () => {
         const { lists, searchQuery } = this.state;
@@ -186,7 +192,7 @@ class ListFunction extends React.Component {
                                 lists={filteredLists}
                                 updatingList={this.updatingList}
                                 deleteList={this.deleteList}
-                                ref={this.setInteractTaskRef}
+                                ref={this.setInteractTaskRefForPagination}
                                 searchQuery={this.state.searchQuery}
                                 itemsPerPage={5} 
                             />
@@ -195,7 +201,7 @@ class ListFunction extends React.Component {
                                 lists={filteredLists}
                                 updatingList={this.updatingList}
                                 deleteList={this.deleteList}
-                                ref={this.setInteractTaskRef}
+                                ref={this.setInteractTaskRefForInfiniteScroll}
                                 searchQuery={this.state.searchQuery}
                                 itemsPerPage={5} 
                             />

@@ -9,7 +9,7 @@ const withPagination = (WrappedComponent) => {
       };
     }
 
-    handleResetPage = () => {
+    resetPagination = () => {
       this.setState({
         currentPage: 1 
       })

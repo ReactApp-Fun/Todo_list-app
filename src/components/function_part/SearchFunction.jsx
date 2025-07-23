@@ -62,7 +62,6 @@ class SearchFunction extends React.Component {
                         />
                         <CoolButton 
                             type="button" 
-                            className="close-search add-button"
                             onClick={this.toggleInput}
                         >
                             Cancel

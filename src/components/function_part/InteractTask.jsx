@@ -4,7 +4,7 @@ import { CoolButton } from "../context/ButtonStyle";
 
 class InteractTask extends React.Component {
   handleResetPage = () => {
-    this.props.handleResetPage();
+    this.props.resetPagination();
   }
   // hàm xử lý highlight một kí tự khi được tìm kiếm
   highlightText = (text, query) => {
