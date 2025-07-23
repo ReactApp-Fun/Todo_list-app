@@ -1,21 +1,19 @@
-// InteractTask.jsx
 import React from "react";
-import withPagination from "../display_part/WithPagination"; // Đường dẫn tới withPagination
-import './styles/function.css';
+import './styles/function.css'
 import { CoolButton } from "../context/ButtonStyle";
+import withPagination from "../display_part/WithPagination";
 
 class InteractTask extends React.Component {
-  componentDidUpdate(prevProps) {
-    if (prevProps.lists !== this.props.lists) {
-      this.props?.handlePageChange(1); // Reset về trang 1 khi danh sách thay đổi
-    }
+  handleResetPage = () => {
+    this.props.handleResetPage();
   }
-
+  // hàm xử lý highlight một kí tự khi được tìm kiếm
   highlightText = (text, query) => {
-    if (!query.trim()) {
-      return text;
+    if(!query.trim()){
+      return text
     }
-    const regex = new RegExp(`(${query})`, 'gi');
+    const regex = new RegExp(`(${query})`, 'gi'); // Biểu thức chính quy để không phân biệt chữ hoa/thường
+    // gi: g:global, i:insensitive
     const parts = text.split(regex);
     return parts.map((part, index) =>
       regex.test(part) ? (
@@ -24,40 +22,43 @@ class InteractTask extends React.Component {
         part
       )
     );
-  };
-
+  }
   render() {
-    const { paginatedLists, searchQuery, updatingList, deleteList } = this.props;
+    const { lists, searchQuery, updatingList, deleteList } = this.props;
 
     return (
       <React.Fragment>
         <>
-          {paginatedLists.map((list) => (
-            <div className="text-list" key={list.id}>
-              <div style={{ margin: "0", wordWrap: "break-word", width: "70%" }}>
-                <div>{this.highlightText(list.text, searchQuery)}</div>
-              </div>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <CoolButton
-                  type="button"
-                  onClick={() => updatingList(list)}
-                >
-                  Update
-                </CoolButton>
-                <CoolButton
-                  type="button"
-                  onClick={() => deleteList(list.id)}
-                >
-                  Delete
-                </CoolButton>
-              </div>
+        {lists.map((list) => (
+          <div className="text-list" key={list.id}>
+            <div style={{ margin: "0", wordWrap: "break-word", width: "70%" }}>
+              <div>{this.highlightText(list.text, searchQuery)}</div>
+              {/* {list.date && (
+                <div>{new Date(list.date).toLocaleDateString()}</div>
+              )} */}
             </div>
-          ))}
-          <div className="pagination">{this.props.pageNumbers}</div>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <CoolButton
+                type="button"
+                className="add-button-2"
+                onClick={() => updatingList(list)}
+              >
+                Update
+              </CoolButton>
+              <CoolButton
+                type="button"
+                className="add-button-2"
+                onClick={() => deleteList(list.id)}
+              >
+                Delete
+              </CoolButton>
+            </div>
+          </div>
+        ))}
         </>
       </React.Fragment>
-    );
+    )
   }
 }
 
-export default withPagination(InteractTask);
+export default withPagination(InteractTask)
