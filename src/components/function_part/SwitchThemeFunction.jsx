@@ -1,14 +1,16 @@
 import React from "react";
 import ThemeContext from "../context/ThemeContext";
 import './styles/function.css';
+import { CoolButton } from "../context/ButtonStyle";
 class ThemeSwitcherFunction extends React.Component {
     render(){
         return(
             <ThemeContext.Consumer>
                 {({ theme, toggleTheme }) => (
-                    <button onClick={toggleTheme} className="theme-button">
+                    <CoolButton onClick={toggleTheme}
+                        className="popup">
                         {theme === 'light' ? 'Dark' : 'Light'}
-                    </button>
+                    </CoolButton>
                 )}
             </ThemeContext.Consumer>
         )

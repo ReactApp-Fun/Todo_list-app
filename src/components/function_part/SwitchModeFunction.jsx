@@ -1,5 +1,5 @@
 import React from "react";
-import {CoolButton} from '../context/ButtonStyle.jsx';
+import {CoolButton} from '../context/ButtonStyle.js';
 
 class SwitchModeFunction extends React.Component {
     render(){

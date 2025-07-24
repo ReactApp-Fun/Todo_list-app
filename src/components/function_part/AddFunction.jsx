@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles/function.css';
-import {CoolButton} from '../context/ButtonStyle.jsx';
+import {CoolButton} from '../context/ButtonStyle.js';
 
 class AddFunction extends React.Component {
     render(){
