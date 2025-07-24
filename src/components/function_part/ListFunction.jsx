@@ -7,6 +7,7 @@ import SearchFunction from '../function_part/SearchFunction';
 import ThemeContext from '../context/ThemeContext';
 import withPagination from '../display_part/WithPagination';
 import withInfiniteScroll from '../display_part/WithInfiniteScroll';
+import SwitchModeFunction from './SwitchModeFunction';
 const PaginatedInteractTask = withPagination(InteractTask);
 const InfiniteScrollInteractTask = withInfiniteScroll(InteractTask);
 
@@ -170,19 +171,12 @@ class ListFunction extends React.Component {
                             <SearchFunction 
                                 onSearch={this.handleSearch}
                             />
+                            <SwitchModeFunction 
+                                onClick={this.handleSwitchMode} 
+                                defaultIsPagi={defaultIsPagi}
+                            />
                         </div>
-                        <button 
-                            onClick={this.handleSwitchMode}
-                            style={{
-                                padding: '5px 10px',
-                                cursor: 'pointer',
-                                backgroundColor: theme === 'light' ? '#eee' : '#555',
-                                border: 'none',
-                                borderRadius: '4px'
-                            }}
-                        >
-                            {defaultIsPagi ? 'Switch to Infinite Scroll' : 'Switch to Pagination'}
-                        </button>
+                        
                     </div>
                     
                     <div className='list-container'>

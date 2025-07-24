@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import '../../components/function_part/styles/function.css';
 
 const withInfiniteScroll = (WrappedComponent) => {
   return class extends Component {
