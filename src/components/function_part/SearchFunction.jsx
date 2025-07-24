@@ -1,5 +1,6 @@
 import React from "react";
 import './styles/button.css'
+import { CoolButton } from "../context/ButtonStyle";
 
 class SearchFunction extends React.Component {
     constructor(props) {
@@ -42,13 +43,13 @@ class SearchFunction extends React.Component {
         return (
             <div>
                 {!this.state.showSearchInput ? (
-                    <button 
+                    <CoolButton 
                         type="button" 
                         className="add-button-2"
                         onClick={this.toggleInput}
                     >
                         Search
-                    </button>
+                    </CoolButton>
                 ) : (
                     <form className="search-container">
                         <input  
@@ -59,13 +60,12 @@ class SearchFunction extends React.Component {
                             onChange={this.handleChange}
                             onKeyDown={this.handlePreventEnterKey}
                         />
-                        <button 
+                        <CoolButton 
                             type="button" 
-                            className="close-search add-button"
                             onClick={this.toggleInput}
                         >
                             Cancel
-                        </button>
+                        </CoolButton>
                     </form>
                 )}
             </div>

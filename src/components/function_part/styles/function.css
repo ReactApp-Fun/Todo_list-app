@@ -1,5 +1,4 @@
 .form{
-    color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,19 +16,22 @@
     flex-direction: column;
     justify-content: flex-end;
     width: 100%;
-    height: 60vh;
-}
-.custom-scrollbar{
-    overflow-y: scroll;
-    scrollbar-width: none;
-    scrollbar-color: #4d4d4d #686868;
 }
 .list{
     width: 100%;
     height: 60vh;
-    background-color: #676767;
-    border-radius: 5px;
     margin-top: 10px;
+}
+.infinite-scroll-container{
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    height: 47vh;
+}
+.loading-message, .no-more-items {
+  padding: 10px;
+  text-align: center;
+  font-style: italic;
+  color: #666;
 }
 .add-button-container {
     display: flex;
@@ -37,41 +39,6 @@
     align-items: center;
     width: 100%;
     height: 50px;
-}
-.add-button-2{
-    width: auto;
-    padding: 10px;
-    border: unset;
-    border-radius: 4px;
-    color: #fff;
-    z-index: 1;
-    background: #fb7a2f;
-    position: relative;
-    font-weight: 500;
-    font-size: 20px;
-    transition: all 250ms;
-    overflow: hidden;
-    cursor: pointer;
-    outline: none;
-}
-.add-button-2::before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 0;
-    border-radius: 4px;
-    background-color: #fff;
-    z-index: -1;
-    transition: all 250ms
-}
-.add-button-2:hover{
-    color: #fb7a2f;
-    border: 1px solid #fb7a2f;
-}
-.add-button-2:hover::before{
-    width: 100%;
 }
 .task-input {
     width: 300px;
@@ -97,6 +64,7 @@
 
 .input-display{
     display: flex;
+    flex-direction: row-reverse;
     align-items: center;
     height: 50px;
     gap: 10px;
@@ -105,18 +73,58 @@
 .text-list{
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     margin: 10px;
+    padding: 5px;
+    border: 1px solid #fb7a2f;
+    
 }
 
 .upper-select{
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
     gap: 10px;
 }
 
 .highlight {
   background-color: #abab1b;
+}
+
+.popup{
+  position: fixed;
+  top: 50px;
+  left: 50px;
+  background: #333;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  z-index: 1000;
+}
+.task-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.add-button-2-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.vertical-line {
+    width: 1px;
+    height: 30px;
+    background-color: #fb7a2f;
+    margin: 0 10px;
+}
+
+.theme-button{
+    background-color: #fb7a2f;
+    color: unset;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
 }
