@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const withPagination = (WrappedComponent) => {
+function withPagination(WrappedComponent){
   return (props) => {
     const [currentPage, setCurrentPage] = useState(1);
 

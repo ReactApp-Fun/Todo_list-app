@@ -2,9 +2,11 @@ import React from "react";
 import './styles/function.css';
 import { CoolButton } from "../context/ButtonStyle";
 
-const InteractTask = (props) => {
+function InteractTask ({resetPagination, lists, searchQuery, updatingList, deleteList }) {
   const handleResetPage = () => {
-    props.resetPagination();
+    if(resetPagination){
+      resetPagination();
+    }
   };
 
   const highlightText = (text, query) => {
@@ -21,8 +23,6 @@ const InteractTask = (props) => {
       )
     );
   };
-
-  const { lists, searchQuery, updatingList, deleteList } = props;
 
   return (
     <React.Fragment>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-const withInfiniteScroll = (WrappedComponent) => {
+function withInfiniteScroll(WrappedComponent) {
   return function InfiniteScrollWrapper(props) {
     // Khởi tạo state
     const [state, setState] = useState({

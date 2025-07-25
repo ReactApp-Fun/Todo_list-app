@@ -1,24 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, /* useRef */ } from "react";
 import "./styles/button.css";
 import { CoolButton } from "../context/ButtonStyle";
 // import DayPicker from "../display_part/DayPicker";
 
-const InputFunction = (props) => {
+function InputFunction(props) {
   const [inputValue, setInputValue] = useState(props.editingList ? props.editingList.text : '');
-  const [selectedDay, setSelectedDay] = useState(undefined);
-  const [isOpen, setIsOpen] = useState(false);
+  // const [selectedDay, setSelectedDay] = useState(undefined);
+  // const [isOpen, setIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(props.editingList ? props.editingList.date : '');
-  const datePickerRef = useRef(null);
+  // const datePickerRef = useRef(null);
 
   useEffect(() => {
     if (props.editingList?.text !== undefined) {
       setInputValue(props.editingList?.text);
       setSelectedDate(props.editingList?.date);
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    // document.addEventListener("mousedown", handleClickOutside);
+    // return () => {
+    //   document.removeEventListener("mousedown", handleClickOutside);
+    // };
   }, [props.editingList]);
 
   const handleChange = (e) => {
@@ -54,20 +54,20 @@ const InputFunction = (props) => {
     props.hideInput();
   };
 
-  const handleClickOutside = (event) => {
-    if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
-      setIsOpen(false);
-    }
-  };
+//   const handleClickOutside = (event) => {
+//     if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
+//       setIsOpen(false);
+//     }
+//   };
 
-  const handleDayClick = (day) => {
-    setSelectedDate(day);
-    setIsOpen(false);
-  };
+//   const handleDayClick = (day) => {
+//     setSelectedDate(day);
+//     setIsOpen(false);
+//   };
 
-  const toggleDayPicker = () => {
-    setIsOpen((prevState) => !prevState);
-  };
+//   const toggleDayPicker = () => {
+//     setIsOpen((prevState) => !prevState);
+//   };
 
   return (
     <form className="input-display" onSubmit={handleSubmit}>
