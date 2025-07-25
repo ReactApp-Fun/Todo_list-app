@@ -2,13 +2,7 @@ import React from "react";
 import './styles/function.css';
 import { CoolButton } from "../context/ButtonStyle";
 
-function InteractTask ({resetPagination, lists, searchQuery, updatingList, deleteList }) {
-  const handleResetPage = () => {
-    if(resetPagination){
-      resetPagination();
-    }
-  };
-
+function InteractTask ({lists, searchQuery, updatingList, deleteList, handleResetPage}) {
   const highlightText = (text, query) => {
     if (!query.trim()) {
       return text;
@@ -23,6 +17,11 @@ function InteractTask ({resetPagination, lists, searchQuery, updatingList, delet
       )
     );
   };
+  const handleGetResetPage = () => {
+    if(handleResetPage){
+      handleResetPage();
+    }
+  }
 
   return (
     <React.Fragment>

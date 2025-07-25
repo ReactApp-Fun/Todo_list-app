@@ -2,7 +2,7 @@ import React from "react";
 import ThemeContext from "../context/ThemeContext";
 import './styles/function.css';
 import { CoolButton } from "../context/ButtonStyle";
-function ThemeSwitcherFunction() {
+function SwitchThemFunction() {
     return(
         <ThemeContext.Consumer>
             {({ theme, toggleTheme }) => (
@@ -15,4 +15,4 @@ function ThemeSwitcherFunction() {
     )
 }
 
-export default ThemeSwitcherFunction;
+export default SwitchThemFunction;

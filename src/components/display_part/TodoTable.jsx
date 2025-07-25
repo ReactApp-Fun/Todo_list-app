@@ -10,7 +10,12 @@ function TodoTable({children}){
                      color: theme === 'light' ? '#000' : '#fff',
                      transition: 'background-color 0.3s ease, color 0.3s ease' }}>
                 <div className="title-block">
-                    <h1 className="title">Todo Website</h1>
+                    <h1 className="title"
+                        style={{
+                            color: theme === 'light' ? '#000' : '#fff',
+                            transition: 'background-color 0.3s ease, color 0.3s ease'
+                        }}>
+                        Todo Website</h1>
                 </div>
             {children}
         </div>
