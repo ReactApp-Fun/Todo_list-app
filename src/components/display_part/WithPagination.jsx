@@ -1,14 +1,10 @@
-import React, {Component} from "react";
+import React, { useState } from "react";
 
 const withPagination = (WrappedComponent) => {
-  return class extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        currentPage: 1,
-      };
-    }
+  return function PaginationWrapper(props) {
+    const [currentPage, setCurrentPage] = useState(1)
 
+    
     resetPagination = () => {
       this.setState({
         currentPage: 1 
@@ -112,7 +108,6 @@ const withPagination = (WrappedComponent) => {
       return pageNumbers;
     };
 
-    render() {
       const totalPages = this.getTotalPages();
       const { lists, itemsPerPage } = this.props;
 
@@ -136,6 +131,5 @@ const withPagination = (WrappedComponent) => {
       );
     }
   }
-}
 
 export default withPagination;

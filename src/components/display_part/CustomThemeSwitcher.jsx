@@ -2,16 +2,14 @@ import React,{useState} from "react";
 import ThemeContext from "../context/ThemeContext"; 
 
 function CustomThemeSwitcher({children}){
-  const [theme, setTheme] = useState('theme')
+  const [theme, setTheme] = useState('light')
 
   const toggleTheme = () => {
-    setTheme((prevState) => ({
-      theme: prevState.theme === 'light' ? 'dark' : 'light',
-    }));
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light' );
   };
 
   return (
-    <ThemeContext.Provider value={{theme: theme, toggleTheme: toggleTheme}}>
+    <ThemeContext.Provider value={{theme, toggleTheme}}>
         {children}
     </ThemeContext.Provider>
   );

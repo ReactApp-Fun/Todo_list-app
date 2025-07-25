@@ -1,105 +1,100 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 const withInfiniteScroll = (WrappedComponent) => {
-  return class extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        itemsToShow: this.props.itemsPerPage || 5,
-        isLoading: false,
-        hasMore: true,
-      };
-      this.scrollContainerRef = React.createRef();
-    }
+  return function InfiniteScrollWrapper(props) {
+    // Khởi tạo state
+    const [state, setState] = useState({
+      itemsToShow: props.itemsPerPage || 5,
+      isLoading: false,
+      hasMore: true
+    });
 
-    componentDidMount() {
-        const scrollContainer = this.scrollContainerRef.current;
-        if (scrollContainer) {
-            scrollContainer.addEventListener("scroll", this.handleScroll);
-        }
-        this.checkIfMoreItems();
-    }
+    const scrollContainerRef = useRef(null);
 
-    componentWillUnmount() {
-        const scrollContainer = this.scrollContainerRef.current;
-        if (scrollContainer) {
-            scrollContainer.removeEventListener("scroll", this.handleScroll);
-        }
-    }
+    // Destructuring state và props
+    const { itemsToShow, isLoading, hasMore } = state;
+    const { lists, itemsPerPage } = props;
 
-    componentDidUpdate(prevProps) {
-      if (prevProps.lists !== this.props.lists) {
-        this.checkIfMoreItems();
+    // Kiểm tra xem còn item để load không
+    const checkIfMoreItems = useCallback(() => {
+      setState(prev => ({
+        ...prev,
+        hasMore: Array.isArray(lists) && prev.itemsToShow < lists.length
+      }));
+    }, [lists]);
+
+    // Load thêm items
+    const loadMoreItems = useCallback(() => {
+      if (isLoading || !hasMore) return;
+
+      setState(prev => ({ ...prev, isLoading: true }));
+
+      setTimeout(() => {
+        setState(prev => ({
+          ...prev,
+          itemsToShow: prev.itemsToShow + (itemsPerPage || 5),
+          isLoading: false
+        }));
+      }, 700);
+    }, [isLoading, hasMore, itemsPerPage]);
+
+    // Xử lý scroll
+    const handleScroll = useCallback(() => {
+      const scrollContainer = scrollContainerRef.current;
+      if (!scrollContainer) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+      const isNearBottom = scrollTop + clientHeight >= scrollHeight - 100;
+
+      if (isNearBottom && !isLoading && hasMore) {
+        loadMoreItems();
       }
-    }
+    }, [isLoading, hasMore, loadMoreItems]);
 
-    checkIfMoreItems = () => {
-      const { lists } = this.props;
-      const { itemsToShow } = this.state;
-      this.setState({
-        hasMore:  Array.isArray(lists) && itemsToShow < lists.length,
+    // Reset scroll
+    const resetInfiniteScroll = useCallback(() => {
+      setState({
+        itemsToShow: itemsPerPage || 5,
+        isLoading: false,
+        hasMore: true
       });
-    };
+    }, [itemsPerPage]);
 
-    loadMoreItems = () => {
-      if (this.state.isLoading || !this.state.hasMore) return;
+    // Effect cho componentDidMount và componentWillUnmount
+    useEffect(() => {
+      const scrollContainer = scrollContainerRef.current;
+      if (scrollContainer) {
+        scrollContainer.addEventListener('scroll', handleScroll);
+      }
 
-      this.setState(
-        { isLoading: true },
-        () => {
-          setTimeout(() => {
-            this.setState(
-              (prevState) => ({
-                itemsToShow: prevState.itemsToShow + (this.props.itemsPerPage || 5),
-                isLoading: false,
-              }),
-              () => {
-                this.checkIfMoreItems();
-              }
-            );
-          }, 700);
-        });
-    };
-
-    handleScroll = () => {
-        const scrollContainer = this.scrollContainerRef.current;
-        if (!scrollContainer) return;
-
-        const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
-        const isNearBottom = scrollTop + clientHeight >= scrollHeight - 100;
-
-        if (isNearBottom && !this.state.isLoading && this.state.hasMore) {
-            this.loadMoreItems();
+      return () => {
+        if (scrollContainer) {
+          scrollContainer.removeEventListener('scroll', handleScroll);
         }
-    };
+      };
+    }, [handleScroll]);
 
-    resetInfiniteScroll = () => {
-      this.setState({
-        itemsToShow: this.props.itemsPerPage || 5,
-        hasMore: true,
-      });
-    };
+    // Effect cho componentDidUpdate
+    useEffect(() => {
+      checkIfMoreItems();
+    }, [lists, checkIfMoreItems]);
 
-    render() {
-      const { itemsToShow } = this.state;
-      const { lists } = this.props;
-      const displayedLists = Array.isArray(lists) ? lists.slice(0, itemsToShow) : [];
+    // Render
+    const displayedLists = Array.isArray(lists) ? lists.slice(0, itemsToShow) : [];
 
-      return (
-        <div ref={this.scrollContainerRef}
-          className="infinite-scroll-container">
-          <WrappedComponent
-            {...this.props}
-            lists={displayedLists}
-            handleResetPage={this.resetInfiniteScroll}
-          />
-          {this.state.isLoading && <div className="loading-message">Loading more items...</div>}
-          {!this.state.hasMore && lists?.length > 0 && (
-            <div className="no-more-items">No more items to load</div>
-          )}
-        </div>
-      );
-    }
+    return (
+      <div ref={scrollContainerRef} className="infinite-scroll-container">
+        <WrappedComponent
+          {...props}
+          lists={displayedLists}
+          handleResetPage={resetInfiniteScroll}
+        />
+        {isLoading && <div className="loading-message">Loading more items...</div>}
+        {!hasMore && lists?.length > 0 && (
+          <div className="no-more-items">No more items to load</div>
+        )}
+      </div>
+    );
   };
 };
 
