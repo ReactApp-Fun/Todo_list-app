@@ -1,18 +1,17 @@
 import React from "react";
-import './styles/function.css'
+import './styles/function.css';
 import { CoolButton } from "../context/ButtonStyle";
 
-class InteractTask extends React.Component {
-  handleResetPage = () => {
-    this.props.resetPagination();
-  }
-  // hàm xử lý highlight một kí tự khi được tìm kiếm
-  highlightText = (text, query) => {
-    if(!query.trim()){
-      return text
+const InteractTask = (props) => {
+  const handleResetPage = () => {
+    props.resetPagination();
+  };
+
+  const highlightText = (text, query) => {
+    if (!query.trim()) {
+      return text;
     }
-    const regex = new RegExp(`(${query})`, 'gi'); // Biểu thức chính quy để không phân biệt chữ hoa/thường
-    // gi: g:global, i:insensitive
+    const regex = new RegExp(`(${query})`, 'gi'); // gi: g:global, i:insensitive
     const parts = text.split(regex);
     return parts.map((part, index) =>
       regex.test(part) ? (
@@ -21,17 +20,17 @@ class InteractTask extends React.Component {
         part
       )
     );
-  }
-  render() {
-    const { lists, searchQuery, updatingList, deleteList } = this.props;
+  };
 
-    return (
-      <React.Fragment>
-        <>
+  const { lists, searchQuery, updatingList, deleteList } = props;
+
+  return (
+    <React.Fragment>
+      <>
         {lists.map((list) => (
           <div className="text-list" key={list.id}>
             <div style={{ margin: "0", wordWrap: "break-word", width: "70%" }}>
-              <div>{this.highlightText(list.text, searchQuery)}</div>
+              <div>{highlightText(list.text, searchQuery)}</div>
               {/* {list.date && (
                 <div>{new Date(list.date).toLocaleDateString()}</div>
               )} */}
@@ -54,10 +53,9 @@ class InteractTask extends React.Component {
             </div>
           </div>
         ))}
-        </>
-      </React.Fragment>
-    )
-  }
-}
+      </>
+    </React.Fragment>
+  );
+};
 
-export default InteractTask
+export default InteractTask;

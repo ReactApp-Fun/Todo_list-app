@@ -1,160 +1,121 @@
-import React from "react";
-import "./styles/button.css"
+import React, { useState, useEffect, useRef } from "react";
+import "./styles/button.css";
 import { CoolButton } from "../context/ButtonStyle";
 // import DayPicker from "../display_part/DayPicker";
 
-class InputFunction extends React.Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            inputValue: props.editingList ? props.editingList.text : '', // tạo trạng thái cho inputValue với giá trị khởi tạo ban đầu là chuỗi rỗng
-            selectedDay: undefined, // tạo state cho selectedDay là undefined 
-            isOpen: false, // tạo trạng thái ban đầu của isOpen = false nhằm tránh mở day picker từ đầu
-            selectedDate: props.editingList ? props.editingList.date: '' // tạo trạng thái cho selectedDate với giá trị khởi tạo ban đầu là chuỗi rỗng
-        };
-        this.datePickerRef = React.createRef() // tạo ref để lấy giá trị của date picker
-    }
+const InputFunction = (props) => {
+  const [inputValue, setInputValue] = useState(props.editingList ? props.editingList.text : '');
+  const [selectedDay, setSelectedDay] = useState(undefined);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(props.editingList ? props.editingList.date : '');
+  const datePickerRef = useRef(null);
 
-    componentDidUpdate = (prevProps) =>{ // tạo một phương thức lifecycle didupdate để render sau khi giá trị được render với tham số prevProps
-        //Thêm các toán tử optional chaining (?) vào trước .text nhằm tránh bị xung đột với phần update list (bởi phần update cũng sử dụng input add task để update)
-        // Optional chaining lúc này xâu chuỗi các hành động add hoặc update 
-        if (this.props.editingList?.text !== prevProps.editingList?.text) {
-            this.setState({
-                // đặt trạng thái của inputValue với state editingList từ ListFunction component nhằm thực hiện quá trình update với text
-                inputValue: this.props.editingList?.text, 
-                // selectedDate cũng giống cái trên nhưng với date
-                selectedDate: this.props.editingList?.date
-            })
-        }
-        // gán sự kiện "mousedown" được xử lý với hàm callback handleClickOutside sẽ xử lý những lần nhất chuột ra ngoài màn hình để tắt date picker
-        document.addEventListener("mousedown", this.handleClickOutside);
+  useEffect(() => {
+    if (props.editingList?.text !== undefined) {
+      setInputValue(props.editingList?.text);
+      setSelectedDate(props.editingList?.date);
     }
-
-    // phương thức xử lý vòng đời của document.removeEventListener sau khi nhấn xong sẽ xoá sự kiện này đi
-    componentWillUnmount() {
-        document.removeEventListener("mousedown", this.handleClickOutside);
-    }
-
-    // hàm xử lý các thay đổi của input 
-    handleChange = (e) => {
-        this.setState({
-            inputValue: e.target.value,
-        })
-    }
-
-    // hàm submit những gì đã nhập từ input
-    handleSubmit = (e) =>{
-        e.preventDefault();
-        this.submitForm()
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, [props.editingList]);
 
-    // hàm xử lý nhấn submit bằng nút enter
-    handleKeyDown = (e) => {
-        if(e.key === 'Enter'){
-            e.preventDefault();
-            this.submitForm();
-        }
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    submitForm();
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      submitForm();
     }
-    
-    // hàm xử lý chức năng submit cho form
-    submitForm = () => {
-        if (this.state.inputValue.trim()) {
-            if (this.props.editingList) {
-                this.props.updateList(
-                    this.props.editingList.id, 
-                    this.state.inputValue,
-                    this.state.selectedDate
-                );
-            } else {
-                this.props.addList(
-                    this.state.inputValue,
-                    this.state.selectedDate
-                );
-            }
-            this.setState({
-                inputValue: '',
-                selectedDate: '' 
-            });
-            this.props.hideInput();
-        }
+  };
+
+  const submitForm = () => {
+    if (inputValue.trim()) {
+      if (props.editingList) {
+        props.updateList(props.editingList.id, inputValue, selectedDate);
+      } else {
+        props.addList(inputValue, selectedDate);
+      }
+      setInputValue('');
+      setSelectedDate('');
+      props.hideInput();
     }
+  };
 
-    // xử lý đóng input
-    handleCancelInput = () =>{
-        this.props.hideInput()
+  const handleCancelInput = () => {
+    props.hideInput();
+  };
+
+  const handleClickOutside = (event) => {
+    if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
+      setIsOpen(false);
     }
+  };
 
-    // xử lý sự kiện bấm ra ngoài màn hình (nằm ngoài phạm vi của day picker) để đóng day picker
-    handleClickOutside = (event) => {
-        if (this.datePickerRef.current && !this.datePickerRef.current.contains(event.target)) {
-        this.setState({ isOpen: false });
-        }
-    };
+  const handleDayClick = (day) => {
+    setSelectedDate(day);
+    setIsOpen(false);
+  };
 
-    // xử lý hành động trên day picker
-    handleDayClick = (day) => {
-        this.setState({
-            selectedDate: day,
-            isOpen: false, // Tự động đóng sau khi chọn ngày
-        });
-    };
+  const toggleDayPicker = () => {
+    setIsOpen((prevState) => !prevState);
+  };
 
-    // xử lý việc nhấn vào day picker
-    toggleDayPicker = () => {
-        this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
-    };
-
-    render(){
-        //const {isOpen, selectedDate} = this.state
-
-        return( 
-            <form className="input-display" onSubmit={this.handleSubmit}>
-                <div>
-                    <input
-                        required
-                        onKeyDown={this.handleKeyDown}
-                        value={this.state.inputValue}
-                        onChange={this.handleChange }
-                        className="task-input"
-                        type="text"
-                        placeholder="Type your task here..."
-                    />
-                    {/* <input 
-                        required
-                        type="date"
-                        className="date-input"
-                        value={selectedDate}
-                        onClick={this.toggleDayPicker}
-                        onChange={this.handleChange}
-                        placeholder="Pick date...(mm/dd/yy)"
-                    /> */}
-                    {/* {isOpen && (
-                        <div ref={this.datePickerRef}>
-                            <DayPicker 
-                                // captionLayout="dropdown"
-                                // className="date-table"
-                                // mode="single"
-                                onDayClick={this.handleDayClick}
-                            />
-                        </div>
-                    )} */}
-                    
-                </div>
-                
-                <div className="add-button-2-group">
-                    <CoolButton type="submit" className="add-button-2" >
-                        Save
-                    </CoolButton>
-                    <CoolButton type="button" 
-                            className="add-button-2"    
-                            onClick={this.handleCancelInput}
-                    >
-                        Cancel
-                    </CoolButton>
-                </div>
-            </form>
-        )
-    }
-}
+  return (
+    <form className="input-display" onSubmit={handleSubmit}>
+      <div>
+        <input
+          required
+          onKeyDown={handleKeyDown}
+          value={inputValue}
+          onChange={handleChange}
+          className="task-input"
+          type="text"
+          placeholder="Type your task here..."
+        />
+        {/* <input 
+          required
+          type="date"
+          className="date-input"
+          value={selectedDate}
+          onClick={toggleDayPicker}
+          onChange={handleChange}
+          placeholder="Pick date...(mm/dd/yy)"
+        /> */}
+        {/* {isOpen && (
+          <div ref={datePickerRef}>
+            <DayPicker 
+              // captionLayout="dropdown"
+              // className="date-table"
+              // mode="single"
+              onDayClick={handleDayClick}
+            />
+          </div>
+        )} */}
+      </div>
+      
+      <div className="add-button-2-group">
+        <CoolButton type="submit" className="add-button-2">
+          Save
+        </CoolButton>
+        <CoolButton 
+          type="button" 
+          className="add-button-2"    
+          onClick={handleCancelInput}
+        >
+          Cancel
+        </CoolButton>
+      </div>
+    </form>
+  );
+};
 
 export default InputFunction;
