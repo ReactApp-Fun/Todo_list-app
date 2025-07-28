@@ -17,11 +17,6 @@ function InteractTask ({lists, searchQuery, updatingList, deleteList, handleRese
       )
     );
   };
-  const handleGetResetPage = () => {
-    if(handleResetPage){
-      handleResetPage();
-    }
-  }
 
   return (
     <React.Fragment>

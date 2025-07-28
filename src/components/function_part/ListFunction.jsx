@@ -11,13 +11,13 @@ import SwitchModeFunction from './SwitchModeFunction';
 const PaginatedInteractTask = withPagination(InteractTask);
 const InfiniteScrollInteractTask = withInfiniteScroll(InteractTask);
 
-function ListFunction({resetPagination}){
+function ListFunction(){
     const [state, setState] = useState({
         lists: JSON.parse(localStorage.getItem('lists')) || [],
         editingList: null,
         showInput: false,
         searchQuery: '',
-        defaultIsPagi: true
+        defaultIsPagi: true,
     })
     const {lists, editingList, showInput, searchQuery, defaultIsPagi} = state
     const interactTaskRefForPagination = useRef(null);
@@ -100,7 +100,7 @@ function ListFunction({resetPagination}){
             searchQuery: query
         }));
         if (interactTaskRefForPagination) {
-            interactTaskRefForPagination.resetPagination?.();
+            interactTaskRefForPagination.handleResetPage?.();
         } else if (interactTaskRefForInfiniteScroll) {
             interactTaskRefForInfiniteScroll.resetInfiniteScroll?.();
         }
@@ -119,8 +119,8 @@ function ListFunction({resetPagination}){
             ...prevState,
             defaultIsPagi: !defaultIsPagi
         }));
-        if (interactTaskRef) {
-            interactTaskRef.handleResetPage?.();
+        if (interactTaskRefForPagination) {
+            interactTaskRefForPagination.handleResetPage?.();
         }
     }
     const filteredLists = getFilteredLists();
