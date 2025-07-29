@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import './styles/function.css';
 import { CoolButton } from "../context/ButtonStyle";
 
-function InteractTask ({lists, searchQuery, updatingList, deleteList, handleResetPage}) {
+function InteractTask({ lists, searchQuery, updatingList, deleteList, handleResetPage }) {
+  // Debug dữ liệu để kiểm tra ID
+  useEffect(() => {
+    if (lists) {
+      const ids = lists.map(list => list.id);
+      const uniqueIds = new Set(ids).size;
+      if (uniqueIds !== ids.length) {
+        console.warn('Cảnh báo: Có ID trùng lặp trong danh sách!', ids);
+      }
+    }
+  }, [lists]);
+
   const highlightText = (text, query) => {
-    if (!query.trim()) {
+    if (!query?.trim()) {
       return text;
     }
     const regex = new RegExp(`(${query})`, 'gi'); // gi: g:global, i:insensitive
@@ -21,8 +32,8 @@ function InteractTask ({lists, searchQuery, updatingList, deleteList, handleRese
   return (
     <React.Fragment>
       <>
-        {lists.map((list) => (
-          <div className="text-list" key={list.id}>
+        {lists?.map((list, index) => (
+          <div className="text-list" key={`${list.id}-${index}`}>
             <div style={{ margin: "0", wordWrap: "break-word", width: "70%" }}>
               <div>{highlightText(list.text, searchQuery)}</div>
               {/* {list.date && (
@@ -50,6 +61,6 @@ function InteractTask ({lists, searchQuery, updatingList, deleteList, handleRese
       </>
     </React.Fragment>
   );
-};
+}
 
-export default InteractTask;
+export default React.memo(InteractTask);

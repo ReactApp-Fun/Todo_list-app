@@ -1,42 +1,45 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import axios from 'axios';
 
 function withInfiniteScroll(WrappedComponent) {
   return function InfiniteScrollWrapper(props) {
-    // Khởi tạo state
     const [state, setState] = useState({
-      itemsToShow: props.itemsPerPage || 5,
+      items: [], // Danh sách các item đã tải
+      page: 1, // Trang hiện tại
       isLoading: false,
-      hasMore: true
+      hasMore: true,
     });
 
     const scrollContainerRef = useRef(null);
+    const { itemsPerPage = 5 } = props; // Mặc định 5 item mỗi trang
 
-    // Destructuring state và props
-    const { itemsToShow, isLoading, hasMore } = state;
-    const { lists, itemsPerPage } = props;
-
-    // Kiểm tra xem còn item để load không
-    const checkIfMoreItems = useCallback(() => {
-      setState(prev => ({
-        ...prev,
-        hasMore: Array.isArray(lists) && prev.itemsToShow < lists.length
-      }));
-    }, [lists]);
-
-    // Load thêm items
-    const loadMoreItems = useCallback(() => {
-      if (isLoading || !hasMore) return;
+    // Load thêm dữ liệu từ API
+    const loadMoreItems = useCallback(async () => {
+      if (state.isLoading || !state.hasMore) return;
 
       setState(prev => ({ ...prev, isLoading: true }));
 
-      setTimeout(() => {
+      try {
+        const response = await axios.get(`${props.apiUrl || 'https://688741f1071f195ca97ff56f.mockapi.io/lists'}`, {
+          params: {
+            page: state.page,
+            limit: itemsPerPage,
+          },
+        });
+        const newItems = response.data;
+
         setState(prev => ({
           ...prev,
-          itemsToShow: prev.itemsToShow + (itemsPerPage || 5),
-          isLoading: false
+          items: [...prev.items, ...newItems],
+          page: prev.page + 1,
+          isLoading: false,
+          hasMore: newItems.length === itemsPerPage, // Nếu số item < limit, hết dữ liệu
         }));
-      }, 700);
-    }, [isLoading, hasMore, itemsPerPage]);
+      } catch (error) {
+        console.error('Error loading more items:', error);
+        setState(prev => ({ ...prev, isLoading: false }));
+      }
+    }, [state.isLoading, state.hasMore, state.page, itemsPerPage, props.apiUrl]);
 
     // Xử lý scroll
     const handleScroll = useCallback(() => {
@@ -46,27 +49,27 @@ function withInfiniteScroll(WrappedComponent) {
       const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
       const isNearBottom = scrollTop + clientHeight >= scrollHeight - 100;
 
-      if (isNearBottom && !isLoading && hasMore) {
+      if (isNearBottom && !state.isLoading && state.hasMore) {
         loadMoreItems();
       }
-    }, [isLoading, hasMore, loadMoreItems]);
+    }, [state.isLoading, state.hasMore, loadMoreItems]);
 
     // Reset scroll
     const resetInfiniteScroll = useCallback(() => {
       setState({
-        itemsToShow: itemsPerPage || 5,
+        items: [],
+        page: 1,
         isLoading: false,
-        hasMore: true
+        hasMore: true,
       });
-    }, [itemsPerPage]);
+    }, []);
 
-    // Effect cho componentDidMount và componentWillUnmount
+    // Effect cho scroll event
     useEffect(() => {
       const scrollContainer = scrollContainerRef.current;
       if (scrollContainer) {
         scrollContainer.addEventListener('scroll', handleScroll);
       }
-
       return () => {
         if (scrollContainer) {
           scrollContainer.removeEventListener('scroll', handleScroll);
@@ -74,28 +77,25 @@ function withInfiniteScroll(WrappedComponent) {
       };
     }, [handleScroll]);
 
-    // Effect cho componentDidUpdate
+    // Load dữ liệu ban đầu
     useEffect(() => {
-      checkIfMoreItems();
-    }, [lists, checkIfMoreItems]);
-
-    // Render
-    const displayedLists = Array.isArray(lists) ? lists.slice(0, itemsToShow) : [];
+      loadMoreItems();
+    }, [loadMoreItems]);
 
     return (
       <div ref={scrollContainerRef} className="infinite-scroll-container">
         <WrappedComponent
           {...props}
-          lists={displayedLists}
+          lists={state.items}
           handleResetPage={resetInfiniteScroll}
         />
-        {isLoading && <div className="loading-message">Loading more items...</div>}
-        {!hasMore && lists?.length > 0 && (
+        {state.isLoading && <div className="loading-message">Loading more items...</div>}
+        {!state.hasMore && state.items.length > 0 && (
           <div className="no-more-items">No more items to load</div>
         )}
       </div>
     );
   };
-};
+}
 
 export default withInfiniteScroll;
