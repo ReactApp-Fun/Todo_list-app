@@ -9,7 +9,7 @@ function InteractTask({ lists, searchQuery, updatingList, deleteList, handleRese
       const ids = lists.map(list => list.id);
       const uniqueIds = new Set(ids).size;
       if (uniqueIds !== ids.length) {
-        console.warn('Cảnh báo: Có ID trùng lặp trong danh sách!', ids);
+        console.warn();
       }
     }
   }, [lists]);

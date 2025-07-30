@@ -28,6 +28,7 @@ function ListFunction() {
   const { theme } = useContext(ThemeContext);
 
   // Lấy dữ liệu từ MockAPI khi component mount
+  // xử dụng async / await để xử lý bất đồng bộ
   useEffect(() => {
     const fetchLists = async () => {
       try {
