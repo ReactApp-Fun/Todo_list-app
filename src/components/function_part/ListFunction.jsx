@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import './styles/function.css';
 import AddFunction from '../function_part/AddFunction';
 import InputFunction from '../function_part/InputFunction';
@@ -8,21 +8,24 @@ import ThemeContext from '../context/ThemeContext';
 import withPagination from '../display_part/WithPagination';
 import withInfiniteScroll from '../display_part/WithInfiniteScroll';
 import SwitchModeFunction from './SwitchModeFunction';
-import axios from 'axios';
 
-const API_URL = 'https://688741f1071f195ca97ff56f.mockapi.io/lists';
+import { useDispatch, useSelector } from 'react-redux';
+import{
+  fetchLists,
+  saveToMockAPI,
+  setEditingList,
+  toggleShowInput,
+  setSearchQuery,
+  togglePagiMode
+} from '../../store'
+import { API_URL } from '../../config';
+
 const PaginatedInteractTask = withPagination(InteractTask);
 const InfiniteScrollInteractTask = withInfiniteScroll(InteractTask);
 
 function ListFunction() {
-  const [state, setState] = useState({
-    lists: [],
-    editingList: null,
-    showInput: false,
-    searchQuery: '',
-    defaultIsPagi: true,
-  });
-  const { lists, editingList, showInput, searchQuery, defaultIsPagi } = state;
+  const dispatch = useDispatch();
+  const {lists, editingList, showInput, searchQuery, defaultIsPagi} = useSelector(state => state)
   const interactTaskRefForPagination = useRef(null);
   const interactTaskRefForInfiniteScroll = useRef(null);
   const { theme } = useContext(ThemeContext);
@@ -30,79 +33,38 @@ function ListFunction() {
   // Lấy dữ liệu từ MockAPI khi component mount
   // xử dụng async / await để xử lý bất đồng bộ
   useEffect(() => {
-    const fetchLists = async () => {
-      try {
-        const response = await axios.get(API_URL);
-        setState(prev => ({ ...prev, lists: response.data }));
-      } catch (error) {
-        console.error('Error when tried to get data from MockAPI:', error);
-      }
-    };
-    fetchLists();
-  }, []);
-
-  // Hàm lưu dữ liệu lên MockAPI (sử dụng POST cho thêm mới, PUT cho cập nhật từng item)
-  const saveToMockAPI = async (method, data, id = null) => {
-    try {
-      let response;
-      if (method === 'post') {
-        response = await axios.post(API_URL, data); // Thêm mới
-        return response.data; // MockAPI trả về item mới
-      } else if (method === 'put' && id) {
-        response = await axios.put(`${API_URL}/${id}`, data); // Cập nhật item
-        return response.data;
-      }
-      setState(prev => ({ ...prev, lists: [...prev.lists, response.data] }));
-    } catch (error) {
-      console.error('Error when save data to MockAPI:', error);
-    }
-  };
+    dispatch(fetchLists());
+  }, [dispatch]);
 
   // Thêm danh sách
   const addList = async (text) => {
     const newList = { text };
-    const addedList = await saveToMockAPI('post', newList); // MockAPI tự sinh ID
-    setState(prev => ({ ...prev, lists: [...prev.lists, addedList], showInput: false }));
+    await dispatch(saveToMockAPI('post', newList))
   };
 
   // Cập nhật một task
   const updateList = async (id, newText) => {
-    const updatedList = { id, text: newText };
-    const result = await saveToMockAPI('put', updatedList, id);
-    setState(prev => ({
-      ...prev,
-      lists: prev.lists.map(list => (list.id === id ? result : list)),
-      showInput: false,
-    }));
+    await dispatch(saveToMockAPI('put', {text: newText}, id))
   };
 
   // Xóa một task
   const deleteList = async (id) => {
-    try {
-      await axios.delete(`${API_URL}/${id}`);
-      setState(prev => ({
-        ...prev,
-        lists: prev.lists.filter(list => list.id !== id),
-        showInput: false,
-      }));
-    } catch (error) {
-      console.error('Error when deleting from MockAPI:', error);
-    }
+    await dispatch(saveToMockAPI('delete', null, id))
   };
 
   // Trạng thái tiến hành đang cập nhật
   const updatingList = (list) => {
-    setState(prev => ({ ...prev, editingList: list, showInput: true }));
+    dispatch(setEditingList(list))
   };
 
   // Xử lý mở input
   const showUpInput = () => {
-    setState(prev => ({ ...prev, showInput: true, editingList: null }));
+    dispatch(toggleShowInput())
   };
 
   // Xử lý đóng input
   const hideInput = () => {
-    setState(prev => ({ ...prev, showInput: false, editingList: null }));
+    dispatch(setEditingList(null))
   };
 
   // Tạo hàm debounce
@@ -116,7 +78,7 @@ function ListFunction() {
 
   // Xử lý tìm kiếm với debounce
   const handleSearch = debounce((query) => {
-    setState(prev => ({ ...prev, searchQuery: query }));
+    dispatch(setSearchQuery(query));
     if (interactTaskRefForPagination.current?.resetPagination) {
       interactTaskRefForPagination.current.resetPagination();
     } else if (interactTaskRefForInfiniteScroll.current?.resetInfiniteScroll) {
@@ -134,7 +96,7 @@ function ListFunction() {
 
   // Xử lý chuyển mode
   const handleSwitchMode = () => {
-    setState(prev => ({ ...prev, defaultIsPagi: !prev.defaultIsPagi }));
+    dispatch(togglePagiMode());
     if (interactTaskRefForPagination.current?.resetPagination) {
       interactTaskRefForPagination.current.resetPagination();
     } else if (interactTaskRefForInfiniteScroll.current?.resetInfiniteScroll) {
@@ -189,6 +151,7 @@ function ListFunction() {
                 ref={interactTaskRefForInfiniteScroll}
                 searchQuery={searchQuery}
                 itemsPerPage={5}
+                apiUrl={API_URL}
               />
             )}
           </div>
