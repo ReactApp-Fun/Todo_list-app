@@ -3,7 +3,6 @@ import './styles/function.css';
 import { CoolButton } from "../context/ButtonStyle";
 
 function InteractTask({ lists, searchQuery, updatingList, deleteList }) {
-  // Debug dữ liệu để kiểm tra ID
   useEffect(() => {
     if (lists) {
       const ids = lists.map(list => list.id);

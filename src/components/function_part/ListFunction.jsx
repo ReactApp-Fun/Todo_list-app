@@ -11,14 +11,14 @@ import SwitchModeFunction from './SwitchModeFunction';
 
 import { useDispatch, useSelector } from 'react-redux';
 import{
-  fetchLists,
-  saveToMockAPI,
+  fetchListsRequest,
+  saveToMockAPIRequest,
   setEditingList,
   toggleShowInput,
   setSearchQuery,
   togglePagiMode
 } from '../../store'
-import { API_URL } from '../../APIconfig';
+import { API_URL } from '../../redux-saga/APIconfig';
 
 const PaginatedInteractTask = withPagination(InteractTask);
 const InfiniteScrollInteractTask = withInfiniteScroll(InteractTask);
@@ -30,26 +30,24 @@ function ListFunction() {
   const interactTaskRefForInfiniteScroll = useRef(null);
   const { theme } = useContext(ThemeContext);
 
-  // Lấy dữ liệu từ MockAPI khi component mount
-  // xử dụng async / await để xử lý bất đồng bộ
   useEffect(() => {
-    dispatch(fetchLists());
+    dispatch(fetchListsRequest());
   }, [dispatch]);
 
   // Thêm danh sách
   const addList = async (text) => {
     const newList = { text };
-    await dispatch(saveToMockAPI('post', newList))
+    await dispatch(saveToMockAPIRequest( 'post', newList ))
   };
 
   // Cập nhật một task
   const updateList = async (id, newText) => {
-    await dispatch(saveToMockAPI('put', {text: newText}, id))
+    await dispatch(saveToMockAPIRequest('put', {text: newText}, id))
   };
 
   // Xóa một task
   const deleteList = async (id) => {
-    await dispatch(saveToMockAPI('delete', null, id))
+    await dispatch(saveToMockAPIRequest('delete', null, id))
   };
 
   // Trạng thái tiến hành đang cập nhật

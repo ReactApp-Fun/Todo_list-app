@@ -1,6 +1,4 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { API_URL } from './APIconfig';
+import { createSlice } from "@reduxjs/toolkit";
 
 const listSlice = createSlice({
   name: 'list',
@@ -47,38 +45,16 @@ const listSlice = createSlice({
   },
 });
 
-// Thunks để xử lý API
-export const fetchLists = () => async (dispatch) => {
-  try {
-    const response = await axios.get(API_URL);
-    dispatch(setLists(response.data));
-  } catch (error) {
-    console.error('Error fetching lists:', error);
-  }
-};
+export const fetchListsRequest = () => ({
+    type: 'FETCH_LISTS_REQUEST'
+})
 
-export const saveToMockAPI = (method, data, id = null) => async (dispatch, getState) => {
-  try {
-    let response;
-    if (method === 'post') {
-      response = await axios.post(API_URL, data);
-      dispatch(addList(response.data));
-    } else if (method === 'put' && id) {
-      response = await axios.put(`${API_URL}/${id}`, { id, text: data.text });
-      dispatch(updateList({ id, newText: data.text }));
-    } else if (method === 'delete' && id) {
-      await axios.delete(`${API_URL}/${id}`);
-      dispatch(deleteList(id));
-    }
-    // Đồng bộ lại danh sách sau khi lưu
-    const updatedLists = await axios.get(API_URL);
-    dispatch(setLists(updatedLists.data));
-  } catch (error) {
-    console.error('Error saving to MockAPI:', error);
-  }
-};
+export const saveToMockAPIRequest = (method, data, id = null) => ({
+    type: 'SAVE_TO_MOCK_API_REQUEST',
+    payload: {method, data, id}
+})
 
-export const {
+export const{
   setLists,
   addList,
   updateList,
@@ -87,8 +63,6 @@ export const {
   toggleShowInput,
   setSearchQuery,
   togglePagiMode,
-} = listSlice.actions;
+} = listSlice.actions
 
-export default configureStore({
-  reducer: listSlice.reducer,
-});
+export default listSlice.reducer
