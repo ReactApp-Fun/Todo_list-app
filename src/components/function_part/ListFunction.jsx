@@ -18,7 +18,7 @@ import{
   setSearchQuery,
   togglePagiMode
 } from '../../store'
-import { API_URL } from '../../config';
+import { API_URL } from '../../APIconfig';
 
 const PaginatedInteractTask = withPagination(InteractTask);
 const InfiniteScrollInteractTask = withInfiniteScroll(InteractTask);
