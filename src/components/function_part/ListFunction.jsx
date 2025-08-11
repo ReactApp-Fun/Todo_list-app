@@ -17,8 +17,8 @@ import{
   toggleShowInput,
   setSearchQuery,
   togglePagiMode
-} from '../../store'
-import { API_URL } from '../../config';
+} from '../../redux/store'
+import { API_URL } from '../../redux/config';
 
 const PaginatedInteractTask = withPagination(InteractTask);
 const InfiniteScrollInteractTask = withInfiniteScroll(InteractTask);
