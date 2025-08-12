@@ -17,15 +17,20 @@ import{
   toggleShowInput,
   setSearchQuery,
   togglePagiMode
-} from '../../store'
-import { API_URL } from '../../redux-saga/APIconfig';
+} from '../../redux-saga/store'
 
 const PaginatedInteractTask = withPagination(InteractTask);
 const InfiniteScrollInteractTask = withInfiniteScroll(InteractTask);
 
 function ListFunction() {
   const dispatch = useDispatch();
-  const {lists, editingList, showInput, searchQuery, defaultIsPagi} = useSelector(state => state)
+
+  const lists = useSelector(state => state.list.lists)
+  const editingList = useSelector(state => state.list.editingList)
+  const showInput = useSelector(state => state.list.showInput)
+  const searchQuery = useSelector(state => state.list.searchQuery)
+  const defaultIsPagi = useSelector(state => state.list.defaultIsPagi)
+  
   const interactTaskRefForPagination = useRef(null);
   const interactTaskRefForInfiniteScroll = useRef(null);
   const { theme } = useContext(ThemeContext);
@@ -37,17 +42,17 @@ function ListFunction() {
   // Thêm danh sách
   const addList = async (text) => {
     const newList = { text };
-    await dispatch(saveToMockAPIRequest( 'post', newList ))
+await dispatch(saveToMockAPIRequest({method: 'post', data: newList}))
   };
 
   // Cập nhật một task
   const updateList = async (id, newText) => {
-    await dispatch(saveToMockAPIRequest('put', {text: newText}, id))
+    await dispatch(saveToMockAPIRequest({method: 'put', data: { text: newText }, id }))
   };
 
   // Xóa một task
   const deleteList = async (id) => {
-    await dispatch(saveToMockAPIRequest('delete', null, id))
+    await dispatch(saveToMockAPIRequest({ method: 'delete', id }))
   };
 
   // Trạng thái tiến hành đang cập nhật
@@ -149,7 +154,6 @@ function ListFunction() {
                 ref={interactTaskRefForInfiniteScroll}
                 searchQuery={searchQuery}
                 itemsPerPage={5}
-                apiUrl={API_URL}
               />
             )}
           </div>

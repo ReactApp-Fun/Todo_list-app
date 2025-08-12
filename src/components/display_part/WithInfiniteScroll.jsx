@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../api/domain';
 
 function withInfiniteScroll(WrappedComponent) {
   return function InfiniteScrollWrapper(props) {
@@ -9,7 +10,6 @@ function withInfiniteScroll(WrappedComponent) {
       isLoading: false,
       hasMore: true,
     });
-
     const scrollContainerRef = useRef(null);
     const { itemsPerPage = 5 } = props; // Mặc định 5 item mỗi trang
 
@@ -20,14 +20,14 @@ function withInfiniteScroll(WrappedComponent) {
       setState(prev => ({ ...prev, isLoading: true }));
 
       try {
-        const response = await axios.get(`${props.apiUrl || 'https://688741f1071f195ca97ff56f.mockapi.io/lists'}`, {
+        const response = await axios.get(API_URL, {
           params: {
             page: state.page,
             limit: itemsPerPage,
           },
         });
         const newItems = response.data;
-
+    
         setState(prev => ({
           ...prev,
           items: [...prev.items, ...newItems],
@@ -39,7 +39,7 @@ function withInfiniteScroll(WrappedComponent) {
         console.error('Error loading more items:', error);
         setState(prev => ({ ...prev, isLoading: false }));
       }
-    }, [state.isLoading, state.hasMore, state.page, itemsPerPage, props.apiUrl]);
+    }, [state.isLoading, state.hasMore, state.page, itemsPerPage]);
 
     // Xử lý scroll
     const handleScroll = useCallback(() => {
@@ -86,7 +86,6 @@ function withInfiniteScroll(WrappedComponent) {
       <div ref={scrollContainerRef} className="infinite-scroll-container">
         <WrappedComponent
           {...props}
-          lists={state.items}
           handleResetPage={resetInfiniteScroll}
         />
         {state.isLoading && <div className="loading-message">Loading more items...</div>}
