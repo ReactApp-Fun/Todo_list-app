@@ -1,5 +1,7 @@
 import { takeEvery, takeLatest, call, put } from 'redux-saga/effects';
 import { api } from '../api/api';
+import { API_URL } from '../api/domain';
+
 import {
   setLists,
   addListSuccess,
@@ -7,31 +9,31 @@ import {
   deleteListSuccess
 } from '../redux-saga/store';
 
-// Fetch all lists
+
 function* fetchListsSaga() {
   try {
-    const data = yield call(api.getLists);
+    const data = yield call(api.getAll, `${API_URL}`);
     if (!data.error) {
       yield put(setLists(data));
     }
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error fetching lists: ', error);
   }
 }
 
-// Save to API (post/put/delete)
 function* saveToMockAPISaga(action) {
   const { method, data, id } = action.payload;
   try {
     let response;
     if (method === 'post') {
-      response = yield call(api.addList, data);
+      response = yield call(api.add, `${API_URL}`, data);
       if (!response.error) yield put(addListSuccess(response));
     } else if (method === 'put') {
-      response = yield call(api.updateList, id, data);
+      response = yield call(api.update, `${API_URL}`, id, data);
       if (!response.error) yield put(updateListSuccess({ id, newText: data.text }));
     } else if (method === 'delete') {
-      yield call(api.deleteList, id);
+      yield call(api.remove, `${API_URL}`, id);
       yield put(deleteListSuccess(id));
     }
   } catch (error) {

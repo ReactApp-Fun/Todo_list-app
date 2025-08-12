@@ -42,7 +42,7 @@ function ListFunction() {
   // Thêm danh sách
   const addList = async (text) => {
     const newList = { text };
-await dispatch(saveToMockAPIRequest({method: 'post', data: newList}))
+    await dispatch(saveToMockAPIRequest({method: 'post', data: newList}))
   };
 
   // Cập nhật một task
