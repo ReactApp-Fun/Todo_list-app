@@ -7,7 +7,7 @@ import {
   addListSuccess,
   updateListSuccess,
   deleteListSuccess
-} from '../redux-saga/store';
+} from './store';
 
 
 function* fetchListsSaga() {
